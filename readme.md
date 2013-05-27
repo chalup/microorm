@@ -91,9 +91,9 @@ Collection<SomeObject> someObjects = uOrm.collectionFromCursor(c, SomeObject.cla
 Caveats
 -------
 
-. Only basic data types (primitives, boxed primitives and Strings) are supported.
-. Unlike gson, MicroOrm works only on explicitly annotated fields.
-. Current implementation is roughly 2-2.5 times slower than handrolled methods.
+* Only basic data types (primitives, boxed primitives and Strings) are supported.
+* Unlike gson, MicroOrm works only on explicitly annotated fields.
+* Current implementation is roughly 2-2.5 times slower than handrolled methods.
 
 License
 -------
