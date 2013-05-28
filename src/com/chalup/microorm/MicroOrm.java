@@ -74,7 +74,7 @@ public class MicroOrm {
    * {@link Collection} of objects of specified type.
    *
    * @param <T> the type of the provided object
-   * @param c a valid {@link Cursor}
+   * @param c a valid {@link Cursor}; the provided {@link Cursor} will not be closed
    * @param klass The {@link Class} of the desired object
    * @return the {@link Collection} of object of type T created from the entire
    *         {@link Cursor}
@@ -82,17 +82,11 @@ public class MicroOrm {
   public <T> Collection<T> collectionFromCursor(Cursor c, Class<T> klass) {
     Collection<T> result = Lists.newArrayList();
 
-    if (c != null) {
-      try {
-        if (c.moveToFirst()) {
-          TypeAdapter<T> adapter = getAdapter(klass);
-          do {
-            result.add(adapter.fromCursor(c, adapter.createInstance()));
-          } while (c.moveToNext());
-        }
-      } finally {
-        c.close();
-      }
+    if (c != null && c.moveToFirst()) {
+      TypeAdapter<T> adapter = getAdapter(klass);
+      do {
+        result.add(adapter.fromCursor(c, adapter.createInstance()));
+      } while (c.moveToNext());
     }
 
     return result;
