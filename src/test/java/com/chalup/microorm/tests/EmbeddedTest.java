@@ -60,6 +60,7 @@ public class EmbeddedTest {
 
     final ContentValues values = testSubject.toContentValues(parent);
     final ShadowContentValues shadowValues = Robolectric.shadowOf(values);
+    assertThat(shadowValues.getAsInteger(AGE_COLUMN)).isEqualTo(TEST_AGE);
     assertThat(shadowValues.getAsString(FIRST_NAME_COLUMN)).isEqualTo(TEST_FIRST_NAME);
     assertThat(shadowValues.getAsString(LAST_NAME_COLUMN)).isEqualTo(TEST_LAST_NAME);
   }
