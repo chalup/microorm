@@ -17,7 +17,8 @@
 package com.chalup.microorm;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 interface FieldAdapterFactory {
-  public FieldAdapter buildAdapter(Field field);
+  public FieldAdapter buildAdapter(Field field, List<Field> parentFields);
 }

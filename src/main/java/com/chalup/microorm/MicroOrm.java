@@ -17,6 +17,7 @@
 package com.chalup.microorm;
 
 import com.chalup.microorm.annotations.Column;
+import com.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -26,6 +27,7 @@ import android.database.Cursor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class MicroOrm {
@@ -105,16 +107,27 @@ public class MicroOrm {
   }
 
   private <T> TypeAdapter<T> buildTypeAdapter(Class<T> klass) {
-    Collection<FieldAdapter> fieldAdapters = Lists.newArrayList();
+    return new ReflectiveTypeAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field> newArrayList()));
+  }
 
-    for (Field field : klass.getFields()) {
-      Column annotation = field.getAnnotation(Column.class);
-      if (annotation != null) {
-        fieldAdapters.add(FIELD_ADAPTER_FACTORIES.get(field.getType()).buildAdapter(field));
+  private List<FieldAdapter> getFieldAdaptersForClass(Class<?> klass, List<Field> parentFields) {
+    List<FieldAdapter> fieldAdapters = Lists.newArrayList();
+
+    for (Field field : klass.getDeclaredFields()) {
+      field.setAccessible(true);
+      Column columnAnnotation = field.getAnnotation(Column.class);
+      if (columnAnnotation != null) {
+        fieldAdapters.add(FIELD_ADAPTER_FACTORIES.get(field.getType()).buildAdapter(field, parentFields));
+      }
+      Embedded embeddedAnnotation = field.getAnnotation(Embedded.class);
+      if (embeddedAnnotation != null) {
+        List<Field> newParentFields = Lists.newArrayList(parentFields);
+        newParentFields.add(field);
+        fieldAdapters.addAll(getFieldAdaptersForClass(field.getType(), newParentFields));
       }
     }
 
-    return new ReflectiveTypeAdapter<T>(klass, fieldAdapters);
+    return fieldAdapters;
   }
 
   private static Map<Class<?>, FieldAdapterFactory> FIELD_ADAPTER_FACTORIES;

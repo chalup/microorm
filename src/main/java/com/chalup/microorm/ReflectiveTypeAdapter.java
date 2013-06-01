@@ -16,11 +16,13 @@
 
 package com.chalup.microorm;
 
+import com.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableList;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 class ReflectiveTypeAdapter<T> implements TypeAdapter<T> {
@@ -35,8 +37,21 @@ class ReflectiveTypeAdapter<T> implements TypeAdapter<T> {
 
   @Override
   public T createInstance() {
+    return createInstance(mKlass);
+  }
+
+  private <T> T createInstance(Class<T> klass) {
     try {
-      return mKlass.newInstance();
+      T instance = klass.newInstance();
+      for (Field field : klass.getDeclaredFields()) {
+        field.setAccessible(true);
+        Embedded embedded = field.getAnnotation(Embedded.class);
+        if (embedded != null) {
+          Object embeddedInstance = createInstance(field.getType());
+          field.set(instance, embeddedInstance);
+        }
+      }
+      return instance;
     } catch (InstantiationException e) {
       throw new AssertionError(e);
     } catch (IllegalAccessException e) {

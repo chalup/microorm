@@ -17,19 +17,35 @@
 package com.chalup.microorm;
 
 import com.chalup.microorm.annotations.Column;
+import com.google.common.collect.ImmutableList;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 abstract class FieldAdapter {
+
+  protected final List<Field> mFields;
   protected final Field mField;
   protected final String mColumnName;
 
-  protected FieldAdapter(Field field) {
+  protected FieldAdapter(Field field, List<Field> parentFields) {
+    mFields = ImmutableList.copyOf(parentFields);
     mField = field;
-    mColumnName = field.getAnnotation(Column.class).value();
+    mColumnName = mField.getAnnotation(Column.class).value();
+  }
+
+  protected Object getObjectToManipulateWith(Object rootObject) {
+    try {
+      for (Field field : mFields) {
+        rootObject = field.get(rootObject);
+      }
+      return rootObject;
+    } catch (IllegalAccessException e) {
+      throw new AssertionError(e);
+    }
   }
 
   public abstract void setValueFromCursor(Cursor inCursor, Object outTarget)

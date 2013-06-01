@@ -20,23 +20,24 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 class FieldAdapters {
 
   public static final FieldAdapterFactory SHORT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getShort(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getShort(inCursor.getColumnIndexOrThrow(mColumnName)));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getShort(inObject));
+          outValues.put(mColumnName, mField.getShort(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -44,18 +45,18 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory INT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getInt(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getInt(inCursor.getColumnIndexOrThrow(mColumnName)));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getInt(inObject));
+          outValues.put(mColumnName, mField.getInt(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -63,18 +64,18 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory LONG_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getLong(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getLong(inCursor.getColumnIndexOrThrow(mColumnName)));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getLong(inObject));
+          outValues.put(mColumnName, mField.getLong(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -82,18 +83,18 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory FLOAT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getFloat(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getFloat(inCursor.getColumnIndexOrThrow(mColumnName)));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getFloat(inObject));
+          outValues.put(mColumnName, mField.getFloat(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -101,18 +102,18 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory DOUBLE_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getDouble(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getDouble(inCursor.getColumnIndexOrThrow(mColumnName)));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getDouble(inObject));
+          outValues.put(mColumnName, mField.getDouble(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -120,18 +121,18 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOOLEAN_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getInt(inCursor.getColumnIndexOrThrow(mColumnName)) == 1);
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getInt(inCursor.getColumnIndexOrThrow(mColumnName)) == 1);
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, mField.getBoolean(inObject));
+          outValues.put(mColumnName, mField.getBoolean(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -139,19 +140,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_SHORT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getShort(columnIndex));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getShort(columnIndex));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Short) mField.get(inObject));
+          outValues.put(mColumnName, (Short) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -159,19 +160,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_INT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getInt(columnIndex));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getInt(columnIndex));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Integer) mField.get(inObject));
+          outValues.put(mColumnName, (Integer) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -179,19 +180,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_LONG_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getLong(columnIndex));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getLong(columnIndex));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Long) mField.get(inObject));
+          outValues.put(mColumnName, (Long) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -199,19 +200,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_FLOAT_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getFloat(columnIndex));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getFloat(columnIndex));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Float) mField.get(inObject));
+          outValues.put(mColumnName, (Float) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -219,19 +220,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_DOUBLE_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getDouble(columnIndex));
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getDouble(columnIndex));
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Double) mField.get(inObject));
+          outValues.put(mColumnName, (Double) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -239,19 +240,19 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory BOXED_BOOLEAN_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
           int columnIndex = inCursor.getColumnIndexOrThrow(mColumnName);
-          mField.set(outTarget, inCursor.isNull(columnIndex) ? null : inCursor.getInt(columnIndex) == 1);
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.isNull(columnIndex) ? null : inCursor.getInt(columnIndex) == 1);
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (Boolean) mField.get(inObject));
+          outValues.put(mColumnName, (Boolean) mField.get(getObjectToManipulateWith(inObject)));
         }
       };
     }
@@ -259,18 +260,22 @@ class FieldAdapters {
 
   public static final FieldAdapterFactory STRING_FACTORY = new FieldAdapterFactory() {
     @Override
-    public FieldAdapter buildAdapter(Field field) {
-      return new FieldAdapter(field) {
+    public FieldAdapter buildAdapter(Field field, List<Field> parentFields) {
+      return new FieldAdapter(field, parentFields) {
         @Override
         public void setValueFromCursor(Cursor inCursor, Object outTarget)
             throws IllegalArgumentException, IllegalAccessException {
-          mField.set(outTarget, inCursor.getString(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.setAccessible(true);
+          mField.set(getObjectToManipulateWith(outTarget), inCursor.getString(inCursor.getColumnIndexOrThrow(mColumnName)));
+          mField.setAccessible(false);
         }
 
         @Override
         public void putToContentValues(Object inObject, ContentValues outValues)
             throws IllegalArgumentException, IllegalAccessException {
-          outValues.put(mColumnName, (String) mField.get(inObject));
+          mField.setAccessible(true);
+          outValues.put(mColumnName, (String) mField.get(getObjectToManipulateWith(inObject)));
+          mField.setAccessible(false);
         }
       };
     }
