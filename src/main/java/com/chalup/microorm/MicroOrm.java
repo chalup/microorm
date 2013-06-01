@@ -16,14 +16,13 @@
 
 package com.chalup.microorm;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import com.chalup.microorm.annotations.Column;
 import com.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import android.content.ContentValues;
-import android.database.Cursor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -107,13 +106,13 @@ public class MicroOrm {
   }
 
   private <T> TypeAdapter<T> buildTypeAdapter(Class<T> klass) {
-    return new ReflectiveTypeAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field> newArrayList()));
+    return new ReflectiveTypeAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field>newArrayList()));
   }
 
   private List<FieldAdapter> getFieldAdaptersForClass(Class<?> klass, List<Field> parentFields) {
     List<FieldAdapter> fieldAdapters = Lists.newArrayList();
 
-    for (Field field : klass.getDeclaredFields()) {
+    for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
       field.setAccessible(true);
       Column columnAnnotation = field.getAnnotation(Column.class);
       if (columnAnnotation != null) {
