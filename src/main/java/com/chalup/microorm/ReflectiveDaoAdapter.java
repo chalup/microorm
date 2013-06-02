@@ -72,9 +72,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   }
 
   @Override
-  public ContentValues toContentValues(T object) {
-    ContentValues values = new ContentValues();
-
+  public ContentValues toContentValues(ContentValues values, T object) {
     for (FieldAdapter fieldAdapter : mFieldAdapters) {
       try {
         fieldAdapter.putToContentValues(object, values);

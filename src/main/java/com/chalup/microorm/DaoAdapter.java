@@ -24,5 +24,5 @@ interface DaoAdapter<T> {
 
   T fromCursor(Cursor c, T object);
 
-  ContentValues toContentValues(T object);
+  ContentValues toContentValues(ContentValues values, T object);
 }
