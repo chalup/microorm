@@ -114,7 +114,7 @@ public class MicroOrm {
 
       Column columnAnnotation = field.getAnnotation(Column.class);
       if (columnAnnotation != null) {
-        fieldAdapters.add(new ColumnFieldAdapter(field, TYPE_ADAPTERS.get(field.getType())));
+        fieldAdapters.add(new ColumnFieldAdapter(field, mTypeAdapters.get(field.getType())));
       }
 
       Embedded embeddedAnnotation = field.getAnnotation(Embedded.class);
@@ -128,7 +128,32 @@ public class MicroOrm {
     return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers);
   }
 
-  private static Map<Class<?>, TypeAdapter<?>> TYPE_ADAPTERS;
+  public MicroOrm() {
+    this(TYPE_ADAPTERS);
+  }
+
+  private MicroOrm(ImmutableMap<Class<?>, TypeAdapter<?>> typeAdapters) {
+    mTypeAdapters = typeAdapters;
+  }
+
+  public static class Builder {
+    private Map<Class<?>, TypeAdapter<?>> mTypeAdapters;
+
+    public Builder() {
+      mTypeAdapters = Maps.newHashMap(TYPE_ADAPTERS);
+    }
+
+    public <T> Builder registerTypeAdapter(Class<T> klass, TypeAdapter<T> typeAdapter) {
+      mTypeAdapters.put(klass, typeAdapter);
+      return this;
+    }
+
+    public MicroOrm build() {
+      return new MicroOrm(ImmutableMap.copyOf(mTypeAdapters));
+    }
+  }
+
+  private static final ImmutableMap<Class<?>, TypeAdapter<?>> TYPE_ADAPTERS;
 
   static {
 
@@ -153,5 +178,6 @@ public class MicroOrm {
     TYPE_ADAPTERS = ImmutableMap.copyOf(typeAdapters);
   }
 
+  private final ImmutableMap<Class<?>, TypeAdapter<?>> mTypeAdapters;
   private Map<Class<?>, DaoAdapter<?>> mDaoAdapterCache = Maps.newHashMap();
 }
