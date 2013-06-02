@@ -73,10 +73,32 @@ public class EmbeddedTest {
     assertThat(parent.getAge()).isEqualTo(TEST_AGE);
   }
 
+  @Test
+  public void shouldInitializeAllEmbeddedFieldsWhenCreatingObjectFromCursor() throws Exception {
+    Cursor cursorMock = mock(Cursor.class);
+    when(cursorMock.getColumnIndex(FIRST_NAME_COLUMN)).thenReturn(0);
+    when(cursorMock.getColumnIndexOrThrow(FIRST_NAME_COLUMN)).thenReturn(0);
+    when(cursorMock.isNull(0)).thenReturn(Boolean.TRUE);
+
+    when(cursorMock.getColumnIndex(LAST_NAME_COLUMN)).thenReturn(1);
+    when(cursorMock.getColumnIndexOrThrow(LAST_NAME_COLUMN)).thenReturn(1);
+    when(cursorMock.isNull(1)).thenReturn(Boolean.TRUE);
+
+    when(cursorMock.getColumnIndex(AGE_COLUMN)).thenReturn(2);
+    when(cursorMock.getColumnIndexOrThrow(AGE_COLUMN)).thenReturn(2);
+    when(cursorMock.getInt(2)).thenReturn(TEST_AGE);
+
+    Parent parent = testSubject.fromCursor(cursorMock, Parent.class);
+
+    assertThat(parent).isNotNull();
+    assertThat(parent.person).isNotNull();
+    assertThat(parent.person.name).isNotNull();
+  }
+
   public static class Parent {
 
     @Embedded
-    private Person person;
+    public Person person;
 
     public Parent() {
 
@@ -105,7 +127,7 @@ public class EmbeddedTest {
     private int age;
 
     @Embedded
-    private Name name;
+    public Name name;
   }
 
   public static class Name {
