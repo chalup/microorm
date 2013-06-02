@@ -19,7 +19,7 @@ package com.chalup.microorm;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-interface TypeAdapter<T> {
+interface DaoAdapter<T> {
   T createInstance();
 
   T fromCursor(Cursor c, T object);

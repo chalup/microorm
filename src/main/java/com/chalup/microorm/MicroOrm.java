@@ -40,7 +40,7 @@ public class MicroOrm {
    * @return an object of type T created from the current row in {@link Cursor}
    */
   public <T> T fromCursor(Cursor c, Class<T> klass) {
-    TypeAdapter<T> adapter = getAdapter(klass);
+    DaoAdapter<T> adapter = getAdapter(klass);
     return adapter.fromCursor(c, adapter.createInstance());
   }
 
@@ -55,7 +55,7 @@ public class MicroOrm {
    */
   @SuppressWarnings("unchecked")
   public <T> T fromCursor(Cursor c, T object) {
-    return ((TypeAdapter<T>) getAdapter(object.getClass())).fromCursor(c, object);
+    return ((DaoAdapter<T>) getAdapter(object.getClass())).fromCursor(c, object);
   }
 
   /**
@@ -67,7 +67,7 @@ public class MicroOrm {
    */
   @SuppressWarnings("unchecked")
   public <T> ContentValues toContentValues(T object) {
-    return ((TypeAdapter<T>) getAdapter(object.getClass())).toContentValues(object);
+    return ((DaoAdapter<T>) getAdapter(object.getClass())).toContentValues(object);
   }
 
   /**
@@ -84,7 +84,7 @@ public class MicroOrm {
     Collection<T> result = Lists.newArrayList();
 
     if (c != null && c.moveToFirst()) {
-      TypeAdapter<T> adapter = getAdapter(klass);
+      DaoAdapter<T> adapter = getAdapter(klass);
       do {
         result.add(adapter.fromCursor(c, adapter.createInstance()));
       } while (c.moveToNext());
@@ -94,19 +94,19 @@ public class MicroOrm {
   }
 
   @SuppressWarnings("unchecked")
-  private <T> TypeAdapter<T> getAdapter(Class<T> klass) {
-    TypeAdapter<?> cached = mTypeAdapterCache.get(klass);
+  private <T> DaoAdapter<T> getAdapter(Class<T> klass) {
+    DaoAdapter<?> cached = mDaoAdapterCache.get(klass);
     if (cached != null) {
-      return (TypeAdapter<T>) cached;
+      return (DaoAdapter<T>) cached;
     }
 
-    TypeAdapter<T> adapter = buildTypeAdapter(klass);
-    mTypeAdapterCache.put(klass, adapter);
+    DaoAdapter<T> adapter = buildDaoAdapter(klass);
+    mDaoAdapterCache.put(klass, adapter);
     return adapter;
   }
 
-  private <T> TypeAdapter<T> buildTypeAdapter(Class<T> klass) {
-    return new ReflectiveTypeAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field>newArrayList()));
+  private <T> DaoAdapter<T> buildDaoAdapter(Class<T> klass) {
+    return new ReflectiveDaoAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field> newArrayList()));
   }
 
   private List<FieldAdapter> getFieldAdaptersForClass(Class<?> klass, List<Field> parentFields) {
@@ -153,5 +153,5 @@ public class MicroOrm {
     FIELD_ADAPTER_FACTORIES = ImmutableMap.copyOf(factories);
   }
 
-  private Map<Class<?>, TypeAdapter<?>> mTypeAdapterCache = Maps.newHashMap();
+  private Map<Class<?>, DaoAdapter<?>> mDaoAdapterCache = Maps.newHashMap();
 }

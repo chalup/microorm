@@ -24,12 +24,12 @@ import com.google.common.collect.ImmutableList;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-class ReflectiveTypeAdapter<T> implements TypeAdapter<T> {
+class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
 
-  ReflectiveTypeAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters) {
+  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters) {
     mKlass = klass;
     mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
   }
