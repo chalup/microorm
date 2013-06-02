@@ -21,17 +21,22 @@ import android.database.Cursor;
 
 import java.lang.reflect.Field;
 
-abstract class FieldAdapter {
+class EmbeddedFieldAdapter extends FieldAdapter {
 
-  protected final Field mField;
+  private final DaoAdapter<Object> mDaoAdapter;
 
-  protected FieldAdapter(Field field) {
-    mField = field;
+  protected EmbeddedFieldAdapter(Field field, DaoAdapter<?> daoAdapter) {
+    super(field);
+    mDaoAdapter = ((DaoAdapter<Object>) daoAdapter);
   }
 
-  public abstract void setValueFromCursor(Cursor inCursor, Object outTarget)
-      throws IllegalArgumentException, IllegalAccessException;
+  @Override
+  public void setValueFromCursor(Cursor inCursor, Object outTarget) throws IllegalArgumentException, IllegalAccessException {
+    mField.set(outTarget, mDaoAdapter.fromCursor(inCursor, mDaoAdapter.createInstance()));
+  }
 
-  public abstract void putToContentValues(Object inObject, ContentValues outValues)
-      throws IllegalArgumentException, IllegalAccessException;
+  @Override
+  public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
+    mDaoAdapter.toContentValues(outValues, mField.get(inObject));
+  }
 }

@@ -17,8 +17,17 @@
 package com.chalup.microorm;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
-interface FieldAdapterFactory {
-  public FieldAdapter buildAdapter(Field field, List<Field> parentFields);
+class EmbeddedFieldInitializer {
+  private final Field mField;
+  private final DaoAdapter<Object> mDaoAdapter;
+
+  public EmbeddedFieldInitializer(Field field, DaoAdapter<?> daoAdapter) {
+    mField = field;
+    mDaoAdapter = ((DaoAdapter<Object>) daoAdapter);
+  }
+
+  public void initEmbeddedField(Object obj) throws IllegalAccessException {
+    mField.set(obj, mDaoAdapter.createInstance());
+  }
 }

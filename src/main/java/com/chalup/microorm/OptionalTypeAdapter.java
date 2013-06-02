@@ -19,19 +19,23 @@ package com.chalup.microorm;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.lang.reflect.Field;
+public class OptionalTypeAdapter<T> implements TypeAdapter<T> {
 
-abstract class FieldAdapter {
+  private final TypeAdapter<T> mWrappedAdapter;
 
-  protected final Field mField;
-
-  protected FieldAdapter(Field field) {
-    mField = field;
+  public OptionalTypeAdapter(TypeAdapter<T> wrappedAdapter) {
+    mWrappedAdapter = wrappedAdapter;
   }
 
-  public abstract void setValueFromCursor(Cursor inCursor, Object outTarget)
-      throws IllegalArgumentException, IllegalAccessException;
+  @Override
+  public T fromCursor(Cursor c, String columnName) {
+    return c.isNull(c.getColumnIndexOrThrow(columnName))
+        ? null
+        : mWrappedAdapter.fromCursor(c, columnName);
+  }
 
-  public abstract void putToContentValues(Object inObject, ContentValues outValues)
-      throws IllegalArgumentException, IllegalAccessException;
+  @Override
+  public void toContentValues(ContentValues values, String columnName, T object) {
+    mWrappedAdapter.toContentValues(values, columnName, object);
+  }
 }

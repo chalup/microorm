@@ -16,23 +16,23 @@
 
 package com.chalup.microorm;
 
-import com.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableList;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 
 class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
+  private final Collection<EmbeddedFieldInitializer> mFieldInitializers;
 
-  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters) {
+  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers) {
     mKlass = klass;
     mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
+    mFieldInitializers = fieldInitializers;
   }
 
   @Override
@@ -43,13 +43,8 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   private <T> T createInstance(Class<T> klass) {
     try {
       T instance = klass.newInstance();
-      for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
-        field.setAccessible(true);
-        Embedded embedded = field.getAnnotation(Embedded.class);
-        if (embedded != null) {
-          Object embeddedInstance = createInstance(field.getType());
-          field.set(instance, embeddedInstance);
-        }
+      for (EmbeddedFieldInitializer fieldInitializer : mFieldInitializers) {
+        fieldInitializer.initEmbeddedField(instance);
       }
       return instance;
     } catch (InstantiationException e) {

@@ -27,7 +27,6 @@ import android.database.Cursor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class MicroOrm {
@@ -107,51 +106,51 @@ public class MicroOrm {
   }
 
   private <T> DaoAdapter<T> buildDaoAdapter(Class<T> klass) {
-    return new ReflectiveDaoAdapter<T>(klass, getFieldAdaptersForClass(klass, Lists.<Field> newArrayList()));
-  }
-
-  private List<FieldAdapter> getFieldAdaptersForClass(Class<?> klass, List<Field> parentFields) {
-    List<FieldAdapter> fieldAdapters = Lists.newArrayList();
+    Collection<FieldAdapter> fieldAdapters = Lists.newArrayList();
+    Collection<EmbeddedFieldInitializer> fieldInitializers = Lists.newArrayList();
 
     for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
       field.setAccessible(true);
+
       Column columnAnnotation = field.getAnnotation(Column.class);
       if (columnAnnotation != null) {
-        fieldAdapters.add(FIELD_ADAPTER_FACTORIES.get(field.getType()).buildAdapter(field, parentFields));
+        fieldAdapters.add(new ColumnFieldAdapter(field, TYPE_ADAPTERS.get(field.getType())));
       }
+
       Embedded embeddedAnnotation = field.getAnnotation(Embedded.class);
       if (embeddedAnnotation != null) {
-        List<Field> newParentFields = Lists.newArrayList(parentFields);
-        newParentFields.add(field);
-        fieldAdapters.addAll(getFieldAdaptersForClass(field.getType(), newParentFields));
+        DaoAdapter<?> daoAdapter = getAdapter(field.getType());
+        fieldAdapters.add(new EmbeddedFieldAdapter(field, daoAdapter));
+        fieldInitializers.add(new EmbeddedFieldInitializer(field, daoAdapter));
       }
     }
 
-    return fieldAdapters;
+    return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers);
   }
 
-  private static Map<Class<?>, FieldAdapterFactory> FIELD_ADAPTER_FACTORIES;
+  private static Map<Class<?>, TypeAdapter<?>> TYPE_ADAPTERS;
 
   static {
-    Map<Class<?>, FieldAdapterFactory> factories = Maps.newHashMap();
 
-    factories.put(short.class, FieldAdapters.SHORT_FACTORY);
-    factories.put(int.class, FieldAdapters.INT_FACTORY);
-    factories.put(long.class, FieldAdapters.LONG_FACTORY);
-    factories.put(boolean.class, FieldAdapters.BOOLEAN_FACTORY);
-    factories.put(float.class, FieldAdapters.FLOAT_FACTORY);
-    factories.put(double.class, FieldAdapters.DOUBLE_FACTORY);
+    Map<Class<?>, TypeAdapter<?>> typeAdapters = Maps.newHashMap();
 
-    factories.put(Short.class, FieldAdapters.BOXED_SHORT_FACTORY);
-    factories.put(Integer.class, FieldAdapters.BOXED_INT_FACTORY);
-    factories.put(Long.class, FieldAdapters.BOXED_LONG_FACTORY);
-    factories.put(Boolean.class, FieldAdapters.BOXED_BOOLEAN_FACTORY);
-    factories.put(Float.class, FieldAdapters.BOXED_FLOAT_FACTORY);
-    factories.put(Double.class, FieldAdapters.BOXED_DOUBLE_FACTORY);
+    typeAdapters.put(short.class, new TypeAdapters.ShortAdapter());
+    typeAdapters.put(int.class, new TypeAdapters.IntegerAdapter());
+    typeAdapters.put(long.class, new TypeAdapters.LongAdapter());
+    typeAdapters.put(boolean.class, new TypeAdapters.BooleanAdapter());
+    typeAdapters.put(float.class, new TypeAdapters.FloatAdapter());
+    typeAdapters.put(double.class, new TypeAdapters.DoubleAdapter());
 
-    factories.put(String.class, FieldAdapters.STRING_FACTORY);
+    typeAdapters.put(Short.class, new OptionalTypeAdapter(new TypeAdapters.ShortAdapter()));
+    typeAdapters.put(Integer.class, new OptionalTypeAdapter(new TypeAdapters.IntegerAdapter()));
+    typeAdapters.put(Long.class, new OptionalTypeAdapter(new TypeAdapters.LongAdapter()));
+    typeAdapters.put(Boolean.class, new OptionalTypeAdapter(new TypeAdapters.BooleanAdapter()));
+    typeAdapters.put(Float.class, new OptionalTypeAdapter(new TypeAdapters.FloatAdapter()));
+    typeAdapters.put(Double.class, new OptionalTypeAdapter(new TypeAdapters.DoubleAdapter()));
 
-    FIELD_ADAPTER_FACTORIES = ImmutableMap.copyOf(factories);
+    typeAdapters.put(String.class, new OptionalTypeAdapter(new TypeAdapters.StringAdapter()));
+
+    TYPE_ADAPTERS = ImmutableMap.copyOf(typeAdapters);
   }
 
   private Map<Class<?>, DaoAdapter<?>> mDaoAdapterCache = Maps.newHashMap();
