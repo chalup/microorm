@@ -1,9 +1,12 @@
 package com.chalup.microorm.tests;
 
-import android.content.ContentValues;
-import android.database.Cursor;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.chalup.microorm.MicroOrm;
 import com.chalup.microorm.annotations.Column;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +15,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowContentValues;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -22,7 +24,6 @@ public class SuperclassTest {
 
   private static final long TEST_ID = 5L;
   private static final String TEST_NAME = "Joseph";
-
 
   private static final String COLUMN_ID = "id";
   private static final String COLUMN_NAME = "name";
