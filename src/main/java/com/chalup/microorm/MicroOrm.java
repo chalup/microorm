@@ -29,6 +29,17 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * This is the main class for using MicroOrm. MicroOrm is typically used by
+ * first constructing a MicroOrm instance and then invoking
+ * {@link #fromCursor(android.database.Cursor, Class)} or
+ * {@link #toContentValues(Object)} methods on it.
+ *
+ * You can create a MicroOrm instance by invoking {@code new MicroOrm()} if the
+ * default configuration is all you need. You can also use
+ * {@link com.chalup.microorm.MicroOrm.Builder} to build a MicroOrm instance
+ * with support for custom fields' types.
+ */
 public class MicroOrm {
   /**
    * Creates an object of the specified type from the current row in
@@ -129,6 +140,10 @@ public class MicroOrm {
     return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers);
   }
 
+  /**
+   * Constructs a MicroOrm object with default configuration, i.e. with support
+   * only for primitives, boxed primitives and String fields.
+   */
   public MicroOrm() {
     this(TYPE_ADAPTERS);
   }
@@ -137,6 +152,14 @@ public class MicroOrm {
     mTypeAdapters = typeAdapters;
   }
 
+  /**
+   * Use this builder to construct a {@link MicroOrm} instance when you need
+   * support for custom fields' types. For {@link MicroOrm} with default
+   * configuration, it is simpler to use {@code new MicroOrm()}. {@link Builder}
+   * is best used by creating it, and then invoking
+   * {@link #registerTypeAdapter(Class, TypeAdapter)} for each custom type, and
+   * finally calling {@link #build()}.</p>
+   */
   public static class Builder {
     private final Map<Class<?>, TypeAdapter<?>> mTypeAdapters;
 
@@ -144,11 +167,30 @@ public class MicroOrm {
       mTypeAdapters = Maps.newHashMap(TYPE_ADAPTERS);
     }
 
+    /**
+     * Configures MicroOrm for custom conversion of fields of given types.
+     *
+     * @param klass the {@link Class} of the type the {@link TypeAdapter} being
+     *          registered
+     * @param typeAdapter implementation defining how the custom type should be
+     *          converted to {@link ContentValues} and from {@link Cursor}.
+     * @return a reference to this {@link Builder} object to fulfill the
+     *         "Builder" pattern
+     */
     public <T> Builder registerTypeAdapter(Class<T> klass, TypeAdapter<T> typeAdapter) {
       mTypeAdapters.put(klass, typeAdapter);
       return this;
     }
 
+    /**
+     * Creates a {@link MicroOrm} instance with support for custom types that
+     * were registered with this {@link Builder}. This method is free of
+     * side-effects to this {@code Builder} instance and hence can be called
+     * multiple times.
+     *
+     * @return an instance of MicroOrm with support for custom types that were
+     *         registered with this this builder
+     */
     public MicroOrm build() {
       return new MicroOrm(ImmutableMap.copyOf(mTypeAdapters));
     }

@@ -19,6 +19,11 @@ package com.chalup.microorm;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+/**
+ * Wrapper for {@link TypeAdapter}. Returns null from
+ * {@link #fromCursor(android.database.Cursor, String)} if the data in the
+ * database column is null, otherwise calls the wrapped adapter.
+ */
 public class OptionalTypeAdapter<T> implements TypeAdapter<T> {
 
   private final TypeAdapter<T> mWrappedAdapter;
