@@ -25,7 +25,8 @@ class EmbeddedFieldAdapter extends FieldAdapter {
 
   private final DaoAdapter<Object> mDaoAdapter;
 
-  protected EmbeddedFieldAdapter(Field field, DaoAdapter<?> daoAdapter) {
+  @SuppressWarnings("unchecked")
+  EmbeddedFieldAdapter(Field field, DaoAdapter<?> daoAdapter) {
     super(field);
     mDaoAdapter = ((DaoAdapter<Object>) daoAdapter);
   }

@@ -25,10 +25,10 @@ import java.lang.reflect.Field;
 
 class ColumnFieldAdapter extends FieldAdapter {
 
-  private String mColumnName;
+  private final String mColumnName;
   private final TypeAdapter<?> mTypeAdapter;
 
-  protected ColumnFieldAdapter(Field field, TypeAdapter<?> typeAdapter) {
+  ColumnFieldAdapter(Field field, TypeAdapter<?> typeAdapter) {
     super(field);
     mTypeAdapter = typeAdapter;
     mColumnName = field.getAnnotation(Column.class).value();
@@ -39,6 +39,7 @@ class ColumnFieldAdapter extends FieldAdapter {
     mField.set(outTarget, mTypeAdapter.fromCursor(inCursor, mColumnName));
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
     ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, mField.get(inObject));

@@ -23,9 +23,9 @@ import java.lang.reflect.Field;
 
 abstract class FieldAdapter {
 
-  protected final Field mField;
+  final Field mField;
 
-  protected FieldAdapter(Field field) {
+  FieldAdapter(Field field) {
     mField = field;
   }
 

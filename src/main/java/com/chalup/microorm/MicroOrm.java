@@ -137,7 +137,7 @@ public class MicroOrm {
   }
 
   public static class Builder {
-    private Map<Class<?>, TypeAdapter<?>> mTypeAdapters;
+    private final Map<Class<?>, TypeAdapter<?>> mTypeAdapters;
 
     public Builder() {
       mTypeAdapters = Maps.newHashMap(TYPE_ADAPTERS);
@@ -179,5 +179,5 @@ public class MicroOrm {
   }
 
   private final ImmutableMap<Class<?>, TypeAdapter<?>> mTypeAdapters;
-  private Map<Class<?>, DaoAdapter<?>> mDaoAdapterCache = Maps.newHashMap();
+  private final Map<Class<?>, DaoAdapter<?>> mDaoAdapterCache = Maps.newHashMap();
 }

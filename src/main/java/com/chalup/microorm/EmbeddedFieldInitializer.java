@@ -22,6 +22,7 @@ class EmbeddedFieldInitializer {
   private final Field mField;
   private final DaoAdapter<Object> mDaoAdapter;
 
+  @SuppressWarnings("unchecked")
   public EmbeddedFieldInitializer(Field field, DaoAdapter<?> daoAdapter) {
     mField = field;
     mDaoAdapter = ((DaoAdapter<Object>) daoAdapter);
