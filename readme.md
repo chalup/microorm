@@ -11,10 +11,10 @@ private static import MyContract.SomeObjectColumns.*;
 
 private static class SomeObject {
 
-  public final String mSomeField;
-  public final long mSomeOtherField;
-  public final Long mSomeOptionalField;
-  public final boolean mBooleanField;
+  private final String mSomeField;
+  private final long mSomeOtherField;
+  private final Long mSomeOptionalField;
+  private final boolean mBooleanField;
 
   private SomeObject (String someValue, long someOtherValue, Long someOptionalValue, boolean booleanValue) {
     mSomeField = someValue;
@@ -47,6 +47,8 @@ private static class SomeObject {
 
     return new SomeObject(someValue, someOtherValue, someOptionalValue, booleanValue);
   }
+
+  // getters and setters
 }
 ```
 
@@ -58,16 +60,18 @@ private static import MyContract.SomeObjectColumns.*;
 
 private static class SomeObject {
   @Column(SOME_FIELD)
-  public final String mSomeField;
+  private String mSomeField;
 
   @Column(SOME_OTHER_FIELD)
-  public final long mSomeOtherField;
+  private long mSomeOtherField;
 
   @Column(SOME_OPTIONAL_FIELD)
-  public final Long mSomeOptionalField;
+  private Long mSomeOptionalField;
 
   @Column(SOME_BOOLEAN_FIELD)
-  public final boolean mBooleanField;
+  private boolean mBooleanField;
+
+  // getters and setters
 }
 ```
 
