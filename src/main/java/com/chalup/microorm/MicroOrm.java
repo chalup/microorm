@@ -75,7 +75,8 @@ public class MicroOrm {
    * {@link Collection} of objects of specified type.
    *
    * @param <T> the type of the provided object
-   * @param c a valid {@link Cursor}; the provided {@link Cursor} will not be closed
+   * @param c a valid {@link Cursor}; the provided {@link Cursor} will not be
+   *          closed
    * @param klass The {@link Class} of the desired object
    * @return the {@link Collection} of object of type T created from the entire
    *         {@link Cursor}
