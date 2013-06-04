@@ -1,7 +1,7 @@
 MicroOrm
 ========
 
-A library for creating Data Access Objects from Android Cursors and converting
+A library for creating POJOs from Android Cursors and converting
 them back into ContentValues.
 
 The following pattern is quite common:
@@ -75,7 +75,7 @@ private static class SomeObject {
 }
 ```
 
-And then use uORM:
+And then use MicroOrm:
 
 ```java
 MicroOrm uOrm = new MicroOrm();
