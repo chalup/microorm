@@ -28,11 +28,18 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
   private final Collection<EmbeddedFieldInitializer> mFieldInitializers;
+  private final ImmutableList<String> mProjection;
 
   ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers) {
     mKlass = klass;
     mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
     mFieldInitializers = fieldInitializers;
+
+    ImmutableList.Builder<String> projectionBuilder = ImmutableList.<String> builder();
+    for (FieldAdapter fieldAdapter : fieldAdapters) {
+      projectionBuilder.add(fieldAdapter.getColumnNames());
+    }
+    mProjection = projectionBuilder.build();
   }
 
   @Override
@@ -79,5 +86,10 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     }
 
     return values;
+  }
+
+  @Override
+  public String[] getProjection() {
+    return mProjection.toArray(new String[mProjection.size()]);
   }
 }

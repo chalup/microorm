@@ -44,4 +44,9 @@ class ColumnFieldAdapter extends FieldAdapter {
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
     ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, mField.get(inObject));
   }
+
+  @Override
+  public String[] getColumnNames() {
+    return new String[] { mColumnName };
+  }
 }

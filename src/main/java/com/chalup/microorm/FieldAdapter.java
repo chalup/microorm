@@ -34,4 +34,6 @@ abstract class FieldAdapter {
 
   public abstract void putToContentValues(Object inObject, ContentValues outValues)
       throws IllegalArgumentException, IllegalAccessException;
+
+  public abstract String[] getColumnNames();
 }

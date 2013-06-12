@@ -114,7 +114,7 @@ public class MicroOrm {
    * @return the {@link String[]} containing column names
    */
   public <T> String[] getProjection(Class<T> klass) {
-    return null;
+    return getAdapter(klass).getProjection();
   }
 
   @SuppressWarnings("unchecked")

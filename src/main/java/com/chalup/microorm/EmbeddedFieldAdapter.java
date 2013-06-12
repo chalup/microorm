@@ -40,4 +40,9 @@ class EmbeddedFieldAdapter extends FieldAdapter {
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
     mDaoAdapter.toContentValues(outValues, mField.get(inObject));
   }
+
+  @Override
+  public String[] getColumnNames() {
+    return mDaoAdapter.getProjection();
+  }
 }
