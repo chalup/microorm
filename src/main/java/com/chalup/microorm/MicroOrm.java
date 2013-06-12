@@ -105,6 +105,18 @@ public class MicroOrm {
     return result;
   }
 
+  /**
+   * Returns an array containing column names needed by {@link MicroOrm} to
+   * successfully create an object of the specified type from {@link Cursor}.
+   *
+   * @param klass The {@link Class} of the object, for which the projection
+   *          should be generated
+   * @return the {@link String[]} containing column names
+   */
+  public <T> String[] getProjection(Class<T> klass) {
+    return null;
+  }
+
   @SuppressWarnings("unchecked")
   private <T> DaoAdapter<T> getAdapter(Class<T> klass) {
     DaoAdapter<?> cached = mDaoAdapterCache.get(klass);
