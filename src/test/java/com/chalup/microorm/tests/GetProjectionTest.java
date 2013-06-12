@@ -20,6 +20,7 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import com.chalup.microorm.MicroOrm;
 import com.chalup.microorm.annotations.Column;
+import com.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -28,11 +29,17 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.HashSet;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
 public class GetProjectionTest {
 
   private static final String SIMPLE_ENTITY_COLUMN = "SIMPLE_ENTITY_COLUMN";
+  private static final String DERIVED_ENTITY_COLUMN = "DERIVED_ENTITY_COLUMN";
+  private static final String EMBEDDED_ENTITY_COLUMN = "EMBEDDED_ENTITY_COLUMN";
+  private static final String ANOTHER_EMBEDDED_ENTITY_COLUMN = "ANOTHER_EMBEDDED_ENTITY_COLUMN";
+  private static final String CONTAINER_ENTITY_COLUMN = "CONTAINER_ENTITY_COLUMN";
 
   private MicroOrm testSubject;
 
@@ -52,5 +59,49 @@ public class GetProjectionTest {
 
     assertThat(projection).isNotNull();
     assertThat(Sets.newHashSet(projection)).contains(SIMPLE_ENTITY_COLUMN);
+  }
+
+  public static class DerivedEntity extends SimpleEntity {
+    @Column(DERIVED_ENTITY_COLUMN)
+    String derivedColumn;
+  }
+
+  @Test
+  public void shouldGetColumnNamesFromSuperClass() throws Exception {
+    String[] projection = testSubject.getProjection(DerivedEntity.class);
+
+    assertThat(projection).isNotNull();
+
+    HashSet<String> projectionAsSet = Sets.newHashSet(projection);
+    assertThat(projectionAsSet).contains(DERIVED_ENTITY_COLUMN);
+    assertThat(projectionAsSet).contains(SIMPLE_ENTITY_COLUMN);
+  }
+
+  public static class EmbeddedEntity {
+    @Column(EMBEDDED_ENTITY_COLUMN)
+    String embeddedColumn;
+
+    @Column(ANOTHER_EMBEDDED_ENTITY_COLUMN)
+    String anotherEmbeddedColumn;
+  }
+
+  public static class ContainerEntity {
+    @Column(CONTAINER_ENTITY_COLUMN)
+    String containerColumn;
+
+    @Embedded
+    EmbeddedEntity embedded;
+  }
+
+  @Test
+  public void shouldGetColumnNamesFromEmbeddedEntities() throws Exception {
+    String[] projection = testSubject.getProjection(ContainerEntity.class);
+
+    assertThat(projection).isNotNull();
+
+    HashSet<String> projectionAsSet = Sets.newHashSet(projection);
+    assertThat(projectionAsSet).contains(CONTAINER_ENTITY_COLUMN);
+    assertThat(projectionAsSet).contains(EMBEDDED_ENTITY_COLUMN);
+    assertThat(projectionAsSet).contains(ANOTHER_EMBEDDED_ENTITY_COLUMN);
   }
 }
