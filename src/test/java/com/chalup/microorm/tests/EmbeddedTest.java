@@ -120,10 +120,6 @@ public class EmbeddedTest {
 
     }
 
-    private Parent(Person person) {
-      this.person = person;
-    }
-
     public int getAge() {
       return person.age;
     }

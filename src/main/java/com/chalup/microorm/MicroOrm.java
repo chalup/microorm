@@ -221,14 +221,14 @@ public class MicroOrm {
     typeAdapters.put(float.class, new TypeAdapters.FloatAdapter());
     typeAdapters.put(double.class, new TypeAdapters.DoubleAdapter());
 
-    typeAdapters.put(Short.class, new OptionalTypeAdapter(new TypeAdapters.ShortAdapter()));
-    typeAdapters.put(Integer.class, new OptionalTypeAdapter(new TypeAdapters.IntegerAdapter()));
-    typeAdapters.put(Long.class, new OptionalTypeAdapter(new TypeAdapters.LongAdapter()));
-    typeAdapters.put(Boolean.class, new OptionalTypeAdapter(new TypeAdapters.BooleanAdapter()));
-    typeAdapters.put(Float.class, new OptionalTypeAdapter(new TypeAdapters.FloatAdapter()));
-    typeAdapters.put(Double.class, new OptionalTypeAdapter(new TypeAdapters.DoubleAdapter()));
+    typeAdapters.put(Short.class, new OptionalTypeAdapter<Short>(new TypeAdapters.ShortAdapter()));
+    typeAdapters.put(Integer.class, new OptionalTypeAdapter<Integer>(new TypeAdapters.IntegerAdapter()));
+    typeAdapters.put(Long.class, new OptionalTypeAdapter<Long>(new TypeAdapters.LongAdapter()));
+    typeAdapters.put(Boolean.class, new OptionalTypeAdapter<Boolean>(new TypeAdapters.BooleanAdapter()));
+    typeAdapters.put(Float.class, new OptionalTypeAdapter<Float>(new TypeAdapters.FloatAdapter()));
+    typeAdapters.put(Double.class, new OptionalTypeAdapter<Double>(new TypeAdapters.DoubleAdapter()));
 
-    typeAdapters.put(String.class, new OptionalTypeAdapter(new TypeAdapters.StringAdapter()));
+    typeAdapters.put(String.class, new OptionalTypeAdapter<String>(new TypeAdapters.StringAdapter()));
 
     TYPE_ADAPTERS = ImmutableMap.copyOf(typeAdapters);
   }

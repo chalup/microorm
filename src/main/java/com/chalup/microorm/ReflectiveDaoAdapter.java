@@ -47,7 +47,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     return createInstance(mKlass);
   }
 
-  private <T> T createInstance(Class<T> klass) {
+  private T createInstance(Class<T> klass) {
     try {
       T instance = klass.newInstance();
       for (EmbeddedFieldInitializer fieldInitializer : mFieldInitializers) {
