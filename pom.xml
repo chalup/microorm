@@ -56,17 +56,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
-        <artifactId>android-maven-plugin</artifactId>
-        <version>${android-maven-plugin.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <sdk>
-            <platform>${api.platform}</platform>
-          </sdk>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
