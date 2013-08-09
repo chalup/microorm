@@ -9,6 +9,35 @@
   <version>0.1</version>
 
   <name>microorm</name>
+  <description>A library for creating POJOs from Android Cursors and converting them back into ContentValues.</description>
+  <url>https://github.com/chalup/microorm</url>
+  <inceptionYear>2013</inceptionYear>
+
+  <scm>
+    <url>https://github.com/chalup/microorm/</url>
+    <connection>scm:git:git://github.com/chalup/microorm.git</connection>
+    <developerConnection>scm:git:git@github.com:chalup/microorm.git</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Jerzy Chalupski</name>
+      <email>jerzy.chalupski@gmail.com</email>
+      <id>chalup</id>
+      <timezone>+1</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
