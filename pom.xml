@@ -12,7 +12,7 @@
   <groupId>org.chalup.microorm</groupId>
   <artifactId>microorm</artifactId>
   <packaging>jar</packaging>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
 
   <name>microorm</name>
   <description>A library for creating POJOs from Android Cursors and converting them back into ContentValues.</description>
