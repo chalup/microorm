@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm.annotations;
+package org.chalup.microorm.annotations;
 
-import com.chalup.microorm.MicroOrm;
+import org.chalup.microorm.MicroOrm;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

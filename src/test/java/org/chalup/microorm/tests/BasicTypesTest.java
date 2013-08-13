@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm.tests;
+package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.chalup.microorm.MicroOrm;
-import com.chalup.microorm.annotations.Column;
+import org.chalup.microorm.MicroOrm;
+import org.chalup.microorm.annotations.Column;
 
 import org.junit.Before;
 import org.junit.Test;

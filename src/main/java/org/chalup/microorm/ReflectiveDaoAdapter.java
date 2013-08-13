@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm;
+package org.chalup.microorm;
 
 import com.google.common.collect.ImmutableList;
 

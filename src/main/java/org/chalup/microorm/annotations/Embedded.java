@@ -1,4 +1,4 @@
-package com.chalup.microorm.annotations;
+package org.chalup.microorm.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

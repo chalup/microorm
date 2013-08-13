@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm;
+package org.chalup.microorm;
 
-import com.chalup.microorm.annotations.Column;
-import com.chalup.microorm.annotations.Embedded;
+import org.chalup.microorm.annotations.Column;
+import org.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -37,7 +37,7 @@ import java.util.Map;
  *
  * You can create a MicroOrm instance by invoking {@code new MicroOrm()} if the
  * default configuration is all you need. You can also use
- * {@link com.chalup.microorm.MicroOrm.Builder} to build a MicroOrm instance
+ * {@link MicroOrm.Builder} to build a MicroOrm instance
  * with support for custom fields' types.
  */
 public class MicroOrm {

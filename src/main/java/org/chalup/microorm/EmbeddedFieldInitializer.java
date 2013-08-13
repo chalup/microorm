@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm;
+package org.chalup.microorm;
 
 import java.lang.reflect.Field;
 

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm;
+package org.chalup.microorm;
 
-import com.chalup.microorm.annotations.Column;
+import org.chalup.microorm.annotations.Column;
 
 import android.content.ContentValues;
 import android.database.Cursor;

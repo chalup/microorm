@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm;
+package org.chalup.microorm;
 
-import com.google.common.collect.Lists;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
 
-class Fields {
+abstract class FieldAdapter {
 
-  static List<Field> allFieldsIncludingPrivateAndSuper(Class<?> klass) {
-    List<Field> fields = Lists.newArrayList();
-    while (!klass.equals(Object.class)) {
-      Collections.addAll(fields, klass.getDeclaredFields());
-      klass = klass.getSuperclass();
-    }
-    return fields;
+  final Field mField;
+
+  FieldAdapter(Field field) {
+    mField = field;
   }
 
+  public abstract void setValueFromCursor(Cursor inCursor, Object outTarget)
+      throws IllegalArgumentException, IllegalAccessException;
+
+  public abstract void putToContentValues(Object inObject, ContentValues outValues)
+      throws IllegalArgumentException, IllegalAccessException;
+
+  public abstract String[] getColumnNames();
 }

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.chalup.microorm.tests;
+package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import com.chalup.microorm.MicroOrm;
-import com.chalup.microorm.annotations.Column;
-import com.chalup.microorm.annotations.Embedded;
+import org.chalup.microorm.MicroOrm;
+import org.chalup.microorm.annotations.Column;
+import org.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
