@@ -108,6 +108,7 @@
         <configuration>
           <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
           <arguments>-Dgpg.keyname=${gpg.keyname}</arguments>
+          <pushChanges>false</pushChanges>
         </configuration>
       </plugin>
       <plugin>
