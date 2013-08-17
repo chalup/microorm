@@ -99,6 +99,15 @@ Caveats
 * Unlike gson, MicroOrm works only on explicitly annotated fields.
 * Current implementation is roughly 2-2.5 times slower than handrolled methods.
 
+
+Building
+--------
+This is standard maven project. To build it just execute:
+```shell
+mvn clean package
+```
+in directory with pom.xml.
+
 License
 -------
 
