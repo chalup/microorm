@@ -108,6 +108,18 @@ mvn clean package
 ```
 in directory with pom.xml.
 
+Download
+--------
+Download [jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=org.chalup.microorm&a=microorm&v=LATEST) or add the dependency to your pom.xml:
+
+```xml
+<dependency>
+  <groupId>org.chalup.microorm</groupId>
+  <artifactId>microorm</artifactId>
+  <version>0.1</version>
+</dependency>
+```
+
 License
 -------
 
