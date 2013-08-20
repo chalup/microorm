@@ -64,7 +64,7 @@ public class NullableColumnsTest {
   }
 
   @Test
-  public void shouldNotIncludeInCustomValuesNullsFromColumnsWithTreatNullAsDefaultEnabled() throws Exception {
+  public void shouldNotIncludeInContentValuesNullsFromColumnsWithTreatNullAsDefaultEnabled() throws Exception {
     ObjectWithDefaultColumn o = new ObjectWithDefaultColumn();
 
     ContentValues contentValues = testSubject.toContentValues(o);
@@ -73,7 +73,7 @@ public class NullableColumnsTest {
   }
 
   @Test
-  public void shouldIncludeInCustomValuesNotNullsFromColumnsWithTreatNullAsDefaultEnabled() throws Exception {
+  public void shouldIncludeInContentValuesNotNullsFromColumnsWithTreatNullAsDefaultEnabled() throws Exception {
     ObjectWithDefaultColumn o = new ObjectWithDefaultColumn();
     o.defaultInt = 42;
 
@@ -83,7 +83,7 @@ public class NullableColumnsTest {
   }
 
   @Test
-  public void shouldIncludeInCustomValuesNullsFromColumnsWithTreatNullAsDefaultDisabled() throws Exception {
+  public void shouldIncludeInContentValuesNullsFromColumnsWithTreatNullAsDefaultDisabled() throws Exception {
     ObjectWithDefaultColumn o = new ObjectWithDefaultColumn();
 
     ContentValues contentValues = testSubject.toContentValues(o);
