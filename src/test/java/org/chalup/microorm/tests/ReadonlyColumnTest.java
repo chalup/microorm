@@ -33,7 +33,7 @@ import android.database.Cursor;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class ReadonlyColumnTests {
+public class ReadonlyColumnTest {
 
   private MicroOrm testSubject;
 
