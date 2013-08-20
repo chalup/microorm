@@ -42,4 +42,5 @@ public @interface Column {
    * @return the desired name of the column representing the field
    */
   String value();
+  boolean treatNullAsDefault() default false;
 }

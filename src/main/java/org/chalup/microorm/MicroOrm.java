@@ -139,6 +139,9 @@ public class MicroOrm {
 
       Column columnAnnotation = field.getAnnotation(Column.class);
       if (columnAnnotation != null) {
+        if (field.getType().isPrimitive() && columnAnnotation.treatNullAsDefault()) {
+          throw new IllegalArgumentException("Cannot set treatNullAsDefault on primitive members");
+        }
         fieldAdapters.add(new ColumnFieldAdapter(field, mTypeAdapters.get(field.getType())));
       }
 

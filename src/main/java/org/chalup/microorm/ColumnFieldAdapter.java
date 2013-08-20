@@ -27,11 +27,15 @@ class ColumnFieldAdapter extends FieldAdapter {
 
   private final String mColumnName;
   private final TypeAdapter<?> mTypeAdapter;
+  private final boolean mTreatNullAsDefault;
 
   ColumnFieldAdapter(Field field, TypeAdapter<?> typeAdapter) {
     super(field);
     mTypeAdapter = typeAdapter;
-    mColumnName = field.getAnnotation(Column.class).value();
+
+    Column columnAnnotation = field.getAnnotation(Column.class);
+    mColumnName = columnAnnotation.value();
+    mTreatNullAsDefault = columnAnnotation.treatNullAsDefault();
   }
 
   @Override
@@ -42,7 +46,11 @@ class ColumnFieldAdapter extends FieldAdapter {
   @SuppressWarnings("unchecked")
   @Override
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
-    ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, mField.get(inObject));
+    Object fieldValue = mField.get(inObject);
+    boolean skipColumn = mTreatNullAsDefault && fieldValue == null;
+    if (!skipColumn) {
+      ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, fieldValue);
+    }
   }
 
   @Override
