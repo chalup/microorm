@@ -88,8 +88,8 @@ do {
   uORM.fromCursor(c, o);
 } while (c.moveToNext());
 
-// if you need to dump the whole cursor to collection
-Collection<SomeObject> someObjects = uOrm.collectionFromCursor(c, SomeObject.class);
+// if you need to dump the whole cursor to list
+List<SomeObject> someObjects = uOrm.listFromCursor(c, SomeObject.class);
 ```
 
 Caveats

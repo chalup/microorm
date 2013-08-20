@@ -27,6 +27,7 @@ import android.database.Cursor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,17 +84,17 @@ public class MicroOrm {
 
   /**
    * Convenience method for converting the whole {@link Cursor} into
-   * {@link Collection} of objects of specified type.
+   * {@link List} of objects of specified type.
    *
    * @param <T> the type of the provided object
    * @param c a valid {@link Cursor}; the provided {@link Cursor} will not be
    *          closed
    * @param klass The {@link Class} of the desired object
-   * @return the {@link Collection} of object of type T created from the entire
+   * @return the {@link List} of object of type T created from the entire
    *         {@link Cursor}
    */
-  public <T> Collection<T> collectionFromCursor(Cursor c, Class<T> klass) {
-    Collection<T> result = Lists.newArrayList();
+  public <T> List<T> listFromCursor(Cursor c, Class<T> klass) {
+    List<T> result = Lists.newArrayList();
 
     if (c != null && c.moveToFirst()) {
       DaoAdapter<T> adapter = getAdapter(klass);
