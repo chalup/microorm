@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 
-class Fields {
+abstract class Fields {
 
   static List<Field> allFieldsIncludingPrivateAndSuper(Class<?> klass) {
     List<Field> fields = Lists.newArrayList();
