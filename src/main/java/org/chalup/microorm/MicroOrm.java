@@ -142,6 +142,9 @@ public class MicroOrm {
         if (field.getType().isPrimitive() && columnAnnotation.treatNullAsDefault()) {
           throw new IllegalArgumentException("Cannot set treatNullAsDefault on primitive members");
         }
+        if (columnAnnotation.treatNullAsDefault() && columnAnnotation.readonly()) {
+          throw new IllegalArgumentException("It doesn't make sense to set treatNullAsDefault on readonly column");
+        }
         fieldAdapters.add(new ColumnFieldAdapter(field, mTypeAdapters.get(field.getType())));
       }
 

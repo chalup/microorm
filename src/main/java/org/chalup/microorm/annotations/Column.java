@@ -43,4 +43,5 @@ public @interface Column {
    */
   String value();
   boolean treatNullAsDefault() default false;
+  boolean readonly() default false;
 }

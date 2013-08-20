@@ -28,6 +28,7 @@ class ColumnFieldAdapter extends FieldAdapter {
   private final String mColumnName;
   private final TypeAdapter<?> mTypeAdapter;
   private final boolean mTreatNullAsDefault;
+  private final boolean mReadonly;
 
   ColumnFieldAdapter(Field field, TypeAdapter<?> typeAdapter) {
     super(field);
@@ -36,6 +37,7 @@ class ColumnFieldAdapter extends FieldAdapter {
     Column columnAnnotation = field.getAnnotation(Column.class);
     mColumnName = columnAnnotation.value();
     mTreatNullAsDefault = columnAnnotation.treatNullAsDefault();
+    mReadonly = columnAnnotation.readonly();
   }
 
   @Override
@@ -47,7 +49,7 @@ class ColumnFieldAdapter extends FieldAdapter {
   @Override
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
     Object fieldValue = mField.get(inObject);
-    boolean skipColumn = mTreatNullAsDefault && fieldValue == null;
+    boolean skipColumn = mReadonly || (mTreatNullAsDefault && fieldValue == null);
     if (!skipColumn) {
       ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, fieldValue);
     }
