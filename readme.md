@@ -116,7 +116,7 @@ Download [jar](http://repository.sonatype.org/service/local/artifact/maven/redir
 <dependency>
   <groupId>org.chalup.microorm</groupId>
   <artifactId>microorm</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
 </dependency>
 ```
 
