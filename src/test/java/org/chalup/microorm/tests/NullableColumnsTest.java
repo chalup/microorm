@@ -17,22 +17,16 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContentValues;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-
-import java.lang.reflect.Field;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)

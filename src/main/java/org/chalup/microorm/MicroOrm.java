@@ -16,19 +16,19 @@
 
 package org.chalup.microorm;
 
-import org.chalup.microorm.annotations.Column;
-import org.chalup.microorm.annotations.Embedded;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
+import org.chalup.microorm.annotations.Column;
+import org.chalup.microorm.annotations.Embedded;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
