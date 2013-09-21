@@ -16,6 +16,7 @@
 
 package org.chalup.microorm;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -107,6 +108,26 @@ public class MicroOrm {
     }
 
     return result;
+  }
+
+  /**
+   * Method for acquiring the {@link Function} converting the {@link Cursor}
+   * row into object of specified type.
+   *
+   * @param <T> the type of the provided object
+   * @param klass The {@link Class} of the function output type
+   * @return the {@link Function} converting {@link Cursor} row into object
+   * of type T.
+   */
+  public <T> Function<Cursor, T> getFunctionFor(final Class<T> klass) {
+    return new Function<Cursor, T>() {
+      private final DaoAdapter<T> mAdapter = getAdapter(klass);
+
+      @Override
+      public T apply(Cursor c) {
+        return mAdapter.fromCursor(c, mAdapter.createInstance());
+      }
+    };
   }
 
   /**
