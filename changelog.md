@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 0.3 *(2013-09-21)*
+----------------------------
+
+ * Added `getFunctionFor` method returning deserialization `Function<Cursor, T>`.
+
 Version 0.2 *(2013-08-22)*
 ----------------------------
 
