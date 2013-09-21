@@ -17,8 +17,7 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
