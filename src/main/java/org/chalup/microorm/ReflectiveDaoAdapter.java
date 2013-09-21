@@ -35,7 +35,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
     mFieldInitializers = fieldInitializers;
 
-    ImmutableList.Builder<String> projectionBuilder = ImmutableList.<String> builder();
+    ImmutableList.Builder<String> projectionBuilder = ImmutableList.builder();
     for (FieldAdapter fieldAdapter : fieldAdapters) {
       projectionBuilder.add(fieldAdapter.getColumnNames());
     }
