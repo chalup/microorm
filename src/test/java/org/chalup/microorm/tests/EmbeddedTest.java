@@ -156,5 +156,4 @@ public class EmbeddedTest {
       this.lastname = lastname;
     }
   }
-
 }

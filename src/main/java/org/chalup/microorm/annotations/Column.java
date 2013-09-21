@@ -32,7 +32,6 @@ import java.lang.annotation.Target;
  * <p>
  * NOTE: The value you specify in this annotation must be a valid column name.
  * </p>
- *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -31,8 +31,7 @@ public interface TypeAdapter<T> {
    *
    * @param c cursor containing the column
    * @param columnName name of the column containing data representing the Java
-   *          object
-   *
+   * object
    * @return the converted Java object. May be null.
    */
   public T fromCursor(Cursor c, String columnName);
@@ -43,7 +42,7 @@ public interface TypeAdapter<T> {
    * key.
    *
    * @param values {@link ContentValues} to be filled with data from
-   *          {@code object}
+   * {@code object}
    * @param columnName name of the target column for converted {@code object}
    * @param object an object to be converted
    */

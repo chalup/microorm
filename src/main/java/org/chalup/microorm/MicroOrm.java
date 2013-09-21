@@ -91,10 +91,10 @@ public class MicroOrm {
    *
    * @param <T> the type of the provided object
    * @param c a valid {@link Cursor}; the provided {@link Cursor} will not be
-   *          closed
+   * closed
    * @param klass The {@link Class} of the desired object
    * @return the {@link List} of object of type T created from the entire
-   *         {@link Cursor}
+   * {@link Cursor}
    */
   public <T> List<T> listFromCursor(Cursor c, Class<T> klass) {
     List<T> result = Lists.newArrayList();
@@ -114,7 +114,7 @@ public class MicroOrm {
    * successfully create an object of the specified type from {@link Cursor}.
    *
    * @param klass The {@link Class} of the object, for which the projection
-   *          should be generated
+   * should be generated
    * @return the {@link String[]} containing column names
    */
   public <T> String[] getProjection(Class<T> klass) {
@@ -210,11 +210,11 @@ public class MicroOrm {
      * Configures MicroOrm for custom conversion of fields of given types.
      *
      * @param klass the {@link Class} of the type the {@link TypeAdapter} being
-     *          registered
+     * registered
      * @param typeAdapter implementation defining how the custom type should be
-     *          converted to {@link ContentValues} and from {@link Cursor}.
+     * converted to {@link ContentValues} and from {@link Cursor}.
      * @return a reference to this {@link Builder} object to fulfill the
-     *         "Builder" pattern
+     * "Builder" pattern
      */
     public <T> Builder registerTypeAdapter(Class<T> klass, TypeAdapter<T> typeAdapter) {
       mTypeAdapters.put(klass, typeAdapter);
@@ -228,7 +228,7 @@ public class MicroOrm {
      * multiple times.
      *
      * @return an instance of MicroOrm with support for custom types that were
-     *         registered with this this builder
+     * registered with this this builder
      */
     public MicroOrm build() {
       return new MicroOrm(ImmutableMap.copyOf(mTypeAdapters));
