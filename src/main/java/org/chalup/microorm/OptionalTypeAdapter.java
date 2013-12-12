@@ -41,6 +41,10 @@ public class OptionalTypeAdapter<T> implements TypeAdapter<T> {
 
   @Override
   public void toContentValues(ContentValues values, String columnName, T object) {
-    mWrappedAdapter.toContentValues(values, columnName, object);
+    if (object != null) {
+      mWrappedAdapter.toContentValues(values, columnName, object);
+    } else {
+      values.putNull(columnName);
+    }
   }
 }
