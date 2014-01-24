@@ -17,6 +17,8 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
@@ -24,10 +26,8 @@ import org.chalup.microorm.annotations.Column;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContentValues;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -65,9 +65,8 @@ public class SuperclassTest {
     model.setId(5L);
     model.setName(TEST_NAME);
     final ContentValues values = testSubject.toContentValues(model);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsString(COLUMN_NAME)).isEqualTo(TEST_NAME);
-    assertThat(shadowValues.getAsLong(COLUMN_ID)).isEqualTo(5L);
+    assertThat(values).contains(entry(COLUMN_NAME, TEST_NAME));
+    assertThat(values).contains(entry(COLUMN_ID, 5L));
   }
 
   @Test

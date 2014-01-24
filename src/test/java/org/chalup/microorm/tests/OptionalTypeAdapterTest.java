@@ -17,6 +17,8 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
@@ -27,10 +29,8 @@ import org.chalup.microorm.tests.CustomTypeAdapterTest.DaoWithCustomType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContentValues;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -67,8 +67,6 @@ public class OptionalTypeAdapterTest {
     DaoWithCustomType daoWithCustomType = new DaoWithCustomType();
 
     final ContentValues values = testSubject.toContentValues(daoWithCustomType);
-
-    final ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.get(TEST_COLUMN)).isNull();
+    assertThat(values).contains(entry(TEST_COLUMN, null));
   }
 }

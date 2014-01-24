@@ -17,6 +17,8 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
@@ -24,10 +26,8 @@ import org.chalup.microorm.annotations.Column;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContentValues;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -69,8 +69,7 @@ public class BasicTypesTest {
     shortDao.mShort = ShortDao.TEST_SHORT;
 
     ContentValues values = testSubject.toContentValues(shortDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsShort(ShortDao.SHORT_COLUMN)).isEqualTo(ShortDao.TEST_SHORT);
+    assertThat(values).contains(entry(ShortDao.SHORT_COLUMN, ShortDao.TEST_SHORT));
   }
 
   public static class IntegerDao {
@@ -99,8 +98,7 @@ public class BasicTypesTest {
     integerDao.mInt = IntegerDao.TEST_INT;
 
     ContentValues values = testSubject.toContentValues(integerDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsInteger(IntegerDao.INTEGER_COLUMN)).isEqualTo(IntegerDao.TEST_INT);
+    assertThat(values).contains(entry(IntegerDao.INTEGER_COLUMN, IntegerDao.TEST_INT));
   }
 
   public static class LongDao {
@@ -129,8 +127,7 @@ public class BasicTypesTest {
     longDao.mLong = LongDao.TEST_LONG;
 
     ContentValues values = testSubject.toContentValues(longDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsLong(LongDao.LONG_COLUMN)).isEqualTo(LongDao.TEST_LONG);
+    assertThat(values).contains(entry(LongDao.LONG_COLUMN, LongDao.TEST_LONG));
   }
 
   public static class FloatDao {
@@ -159,8 +156,7 @@ public class BasicTypesTest {
     floatDao.mFloat = FloatDao.TEST_FLOAT;
 
     ContentValues values = testSubject.toContentValues(floatDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsFloat(FloatDao.FLOAT_COLUMN)).isEqualTo(FloatDao.TEST_FLOAT);
+    assertThat(values).contains(entry(FloatDao.FLOAT_COLUMN, FloatDao.TEST_FLOAT));
   }
 
   public static class DoubleDao {
@@ -189,8 +185,7 @@ public class BasicTypesTest {
     doubleDao.mDouble = DoubleDao.TEST_DOUBLE;
 
     ContentValues values = testSubject.toContentValues(doubleDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsDouble(DoubleDao.DOUBLE_COLUMN)).isEqualTo(DoubleDao.TEST_DOUBLE);
+    assertThat(values).contains(entry(DoubleDao.DOUBLE_COLUMN, DoubleDao.TEST_DOUBLE));
   }
 
   public static class BooleanDao {
@@ -227,9 +222,8 @@ public class BasicTypesTest {
     booleanDao.mTrueBoolean = true;
 
     ContentValues values = testSubject.toContentValues(booleanDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsBoolean(BooleanDao.TRUE_BOOLEAN_COLUMN)).isTrue();
-    assertThat(shadowValues.getAsBoolean(BooleanDao.FALSE_BOOLEAN_COLUMN)).isFalse();
+    assertThat(values).contains(entry(BooleanDao.TRUE_BOOLEAN_COLUMN, true));
+    assertThat(values).contains(entry(BooleanDao.FALSE_BOOLEAN_COLUMN, false));
   }
 
   public static class BoxedShortDao {
@@ -269,9 +263,8 @@ public class BasicTypesTest {
     boxedShortDao.mShort = BoxedShortDao.TEST_SHORT;
 
     ContentValues values = testSubject.toContentValues(boxedShortDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsShort(BoxedShortDao.SHORT_COLUMN)).isEqualTo(BoxedShortDao.TEST_SHORT);
-    assertThat(shadowValues.getAsShort(BoxedShortDao.NULL_SHORT_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedShortDao.SHORT_COLUMN, BoxedShortDao.TEST_SHORT));
+    assertThat(values).contains(entry(BoxedShortDao.NULL_SHORT_COLUMN, null));
   }
 
   public static class BoxedIntegerDao {
@@ -310,9 +303,8 @@ public class BasicTypesTest {
     boxedIntegerDao.mInt = BoxedIntegerDao.TEST_INT;
 
     ContentValues values = testSubject.toContentValues(boxedIntegerDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsInteger(BoxedIntegerDao.INTEGER_COLUMN)).isEqualTo(BoxedIntegerDao.TEST_INT);
-    assertThat(shadowValues.getAsInteger(BoxedIntegerDao.NULL_INTEGER_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedIntegerDao.INTEGER_COLUMN, BoxedIntegerDao.TEST_INT));
+    assertThat(values).contains(entry(BoxedIntegerDao.NULL_INTEGER_COLUMN, null));
   }
 
   public static class BoxedLongDao {
@@ -351,9 +343,8 @@ public class BasicTypesTest {
     boxedLongDao.mLong = BoxedLongDao.TEST_LONG;
 
     ContentValues values = testSubject.toContentValues(boxedLongDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsLong(BoxedLongDao.LONG_COLUMN)).isEqualTo(BoxedLongDao.TEST_LONG);
-    assertThat(shadowValues.getAsLong(BoxedLongDao.NULL_LONG_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedLongDao.LONG_COLUMN, BoxedLongDao.TEST_LONG));
+    assertThat(values).contains(entry(BoxedLongDao.NULL_LONG_COLUMN, null));
   }
 
   public static class BoxedFloatDao {
@@ -393,9 +384,8 @@ public class BasicTypesTest {
     boxedFloatDao.mFloat = BoxedFloatDao.TEST_FLOAT;
 
     ContentValues values = testSubject.toContentValues(boxedFloatDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsFloat(BoxedFloatDao.FLOAT_COLUMN)).isEqualTo(BoxedFloatDao.TEST_FLOAT);
-    assertThat(shadowValues.getAsFloat(BoxedFloatDao.NULL_FLOAT_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedFloatDao.FLOAT_COLUMN, BoxedFloatDao.TEST_FLOAT));
+    assertThat(values).contains(entry(BoxedFloatDao.NULL_FLOAT_COLUMN, null));
   }
 
   public static class BoxedDoubleDao {
@@ -434,9 +424,8 @@ public class BasicTypesTest {
     boxedDoubleDao.mDouble = BoxedDoubleDao.TEST_DOUBLE;
 
     ContentValues values = testSubject.toContentValues(boxedDoubleDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsDouble(BoxedDoubleDao.DOUBLE_COLUMN)).isEqualTo(BoxedDoubleDao.TEST_DOUBLE);
-    assertThat(shadowValues.getAsDouble(BoxedDoubleDao.NULL_DOUBLE_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedDoubleDao.DOUBLE_COLUMN, BoxedDoubleDao.TEST_DOUBLE));
+    assertThat(values).contains(entry(BoxedDoubleDao.NULL_DOUBLE_COLUMN, null));
   }
 
   public static class BoxedBooleanDao {
@@ -485,10 +474,9 @@ public class BasicTypesTest {
     boxedBooleanDao.mFalseBoolean = Boolean.FALSE;
 
     ContentValues values = testSubject.toContentValues(boxedBooleanDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsBoolean(BoxedBooleanDao.TRUE_BOOLEAN_COLUMN)).isTrue();
-    assertThat(shadowValues.getAsBoolean(BoxedBooleanDao.FALSE_BOOLEAN_COLUMN)).isFalse();
-    assertThat(shadowValues.getAsBoolean(BoxedBooleanDao.NULL_BOOLEAN_COLUMN)).isNull();
+    assertThat(values).contains(entry(BoxedBooleanDao.TRUE_BOOLEAN_COLUMN, true));
+    assertThat(values).contains(entry(BoxedBooleanDao.FALSE_BOOLEAN_COLUMN, false));
+    assertThat(values).contains(entry(BoxedBooleanDao.NULL_BOOLEAN_COLUMN, null));
   }
 
   public static class StringDao {
@@ -528,8 +516,7 @@ public class BasicTypesTest {
     stringDao.mString = StringDao.TEST_STRING;
 
     ContentValues values = testSubject.toContentValues(stringDao);
-    ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsString(StringDao.STRING_COLUMN)).isEqualTo(StringDao.TEST_STRING);
-    assertThat(shadowValues.getAsString(StringDao.NULL_STRING_COLUMN)).isNull();
+    assertThat(values).contains(entry(StringDao.STRING_COLUMN, StringDao.TEST_STRING));
+    assertThat(values).contains(entry(StringDao.NULL_STRING_COLUMN, null));
   }
 }

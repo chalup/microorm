@@ -17,6 +17,8 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.ANDROID.assertThat;
+import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
@@ -25,10 +27,8 @@ import org.chalup.microorm.annotations.Embedded;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowContentValues;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -73,10 +73,12 @@ public class EmbeddedTest {
     parent.person.name = new Name(TEST_FIRST_NAME, TEST_LAST_NAME);
 
     final ContentValues values = testSubject.toContentValues(parent);
-    final ShadowContentValues shadowValues = Robolectric.shadowOf(values);
-    assertThat(shadowValues.getAsInteger(AGE_COLUMN)).isEqualTo(TEST_AGE);
-    assertThat(shadowValues.getAsString(FIRST_NAME_COLUMN)).isEqualTo(TEST_FIRST_NAME);
-    assertThat(shadowValues.getAsString(LAST_NAME_COLUMN)).isEqualTo(TEST_LAST_NAME);
+
+    assertThat(values).contains(
+        entry(AGE_COLUMN, TEST_AGE),
+        entry(FIRST_NAME_COLUMN, TEST_FIRST_NAME),
+        entry(LAST_NAME_COLUMN, TEST_LAST_NAME)
+    );
   }
 
   @Test
