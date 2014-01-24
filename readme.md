@@ -108,6 +108,10 @@ mvn clean package
 ```
 in directory with pom.xml.
 
+minSdkVersion = 10
+------------------
+MicroOrm is compatibile with Android 2.3 and newer.
+
 Download
 --------
 Download [jar](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=org.chalup.microorm&a=microorm&v=LATEST) or add the dependency to your pom.xml:
