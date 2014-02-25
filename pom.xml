@@ -11,7 +11,7 @@
   <groupId>org.chalup.microorm</groupId>
   <artifactId>microorm</artifactId>
   <packaging>jar</packaging>
-  <version>0.4</version>
+  <version>0.5-SNAPSHOT</version>
 
   <name>microorm</name>
   <description>A library for creating POJOs from Android Cursors and converting them back into ContentValues.</description>
@@ -22,7 +22,7 @@
     <url>https://github.com/chalup/microorm/</url>
     <connection>scm:git:git://github.com/chalup/microorm.git</connection>
     <developerConnection>scm:git:git@github.com:chalup/microorm.git</developerConnection>
-    <tag>0.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
