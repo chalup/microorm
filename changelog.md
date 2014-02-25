@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 0.4 *(2014-02-25)*
+----------------------------
+
+ * Fixed converting null objects to ContentValues in OptionalTypeAdapter.
+ * minSdkVersion = 10
+
 Version 0.3 *(2013-09-21)*
 ----------------------------
 
