@@ -33,7 +33,8 @@ abstract class FieldAdapter {
       throws IllegalArgumentException, IllegalAccessException;
 
   public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalAccessException {
-    putValueToContentValues(mField.get(inObject), outValues);
+    Object value = inObject != null ? mField.get(inObject) : null;
+    putValueToContentValues(value, outValues);
   }
 
   protected abstract void putValueToContentValues(Object value, ContentValues outValues);
