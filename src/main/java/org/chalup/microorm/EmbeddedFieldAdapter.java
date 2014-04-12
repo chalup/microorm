@@ -37,8 +37,8 @@ class EmbeddedFieldAdapter extends FieldAdapter {
   }
 
   @Override
-  public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
-    mDaoAdapter.toContentValues(outValues, mField.get(inObject));
+  protected void putValueToContentValues(Object value, ContentValues outValues) {
+    mDaoAdapter.toContentValues(outValues, value);
   }
 
   @Override
