@@ -111,6 +111,20 @@ public class EmbeddedTest {
     assertThat(parent.person.name).isNotNull();
   }
 
+  @Test
+  public void shouldHandleNulledEmbeddedField() throws Exception {
+    final Parent parent = new Parent();
+    final ContentValues contentValues = testSubject.toContentValues(parent);
+    assertValuesAreNull(contentValues, FIRST_NAME_COLUMN, LAST_NAME_COLUMN, AGE_COLUMN);
+  }
+
+  private void assertValuesAreNull(ContentValues values, String... columnNames) {
+    for (String columnName : columnNames) {
+      assertThat(values.containsKey(columnName)).isTrue();
+      assertThat(values.get(columnName)).isNull();
+    }
+  }
+
   public static class Parent {
 
     @Embedded

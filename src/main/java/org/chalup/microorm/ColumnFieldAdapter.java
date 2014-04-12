@@ -47,8 +47,7 @@ class ColumnFieldAdapter extends FieldAdapter {
 
   @SuppressWarnings("unchecked")
   @Override
-  public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalArgumentException, IllegalAccessException {
-    Object fieldValue = mField.get(inObject);
+  protected void putValueToContentValues(Object fieldValue, ContentValues outValues) {
     boolean skipColumn = mReadonly || (mTreatNullAsDefault && fieldValue == null);
     if (!skipColumn) {
       ((TypeAdapter<Object>) mTypeAdapter).toContentValues(outValues, mColumnName, fieldValue);

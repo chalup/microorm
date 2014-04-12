@@ -32,8 +32,12 @@ abstract class FieldAdapter {
   public abstract void setValueFromCursor(Cursor inCursor, Object outTarget)
       throws IllegalArgumentException, IllegalAccessException;
 
-  public abstract void putToContentValues(Object inObject, ContentValues outValues)
-      throws IllegalArgumentException, IllegalAccessException;
+  public void putToContentValues(Object inObject, ContentValues outValues) throws IllegalAccessException {
+    Object value = inObject != null ? mField.get(inObject) : null;
+    putValueToContentValues(value, outValues);
+  }
+
+  protected abstract void putValueToContentValues(Object value, ContentValues outValues);
 
   public abstract String[] getColumnNames();
 }
