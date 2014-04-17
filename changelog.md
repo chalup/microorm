@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 0.4.1 *(2014-04-17)*
+----------------------------
+
+ * Fixed crash on converting @Embedded object with null fields to ContentValues
+
 Version 0.4 *(2014-02-25)*
 ----------------------------
 
