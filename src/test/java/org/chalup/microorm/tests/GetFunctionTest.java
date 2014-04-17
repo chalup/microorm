@@ -83,6 +83,6 @@ public class GetFunctionTest {
       fromFunction.add(function.apply(cursor));
     } while (cursor.moveToNext());
 
-    assertThat(fromFunction).containsSequence(reference.toArray(new SimpleEntity[reference.size()]));
+    assertThat(fromFunction).containsSequence(reference.toArray());
   }
 }
