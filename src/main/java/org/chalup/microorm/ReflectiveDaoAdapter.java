@@ -16,12 +16,15 @@
 
 package org.chalup.microorm;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.Collection;
+import java.util.Set;
 
 class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
@@ -29,8 +32,9 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   private final ImmutableList<FieldAdapter> mFieldAdapters;
   private final Collection<EmbeddedFieldInitializer> mFieldInitializers;
   private final ImmutableList<String> mProjection;
+  private final ImmutableSet<String> mDuplicates;
 
-  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers) {
+  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers, Set<String> duplicates) {
     mKlass = klass;
     mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
     mFieldInitializers = fieldInitializers;
@@ -40,6 +44,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
       projectionBuilder.add(fieldAdapter.getColumnNames());
     }
     mProjection = projectionBuilder.build();
+    mDuplicates = ImmutableSet.copyOf(duplicates);
   }
 
   @Override
@@ -75,6 +80,9 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   @Override
   public ContentValues toContentValues(ContentValues values, T object) {
+    if (!mDuplicates.isEmpty()) {
+      throw new IllegalArgumentException("Duplicate columns definitions: " + Joiner.on(", ").join(mDuplicates));
+    }
     for (FieldAdapter fieldAdapter : mFieldAdapters) {
       try {
         fieldAdapter.putToContentValues(object, values);

@@ -16,6 +16,10 @@
 
 package org.chalup.microorm.tests;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
 import org.chalup.microorm.annotations.Embedded;
@@ -25,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import android.database.Cursor;
 import android.provider.BaseColumns;
 
 @RunWith(RobolectricTestRunner.class)
@@ -66,12 +71,12 @@ public class OverridingColumnsTest {
     testSubject.toContentValues(new InvalidDerivedObject());
   }
 
-  private static class EmbeddedObject {
+  public static class EmbeddedObject {
     @Column(BaseColumns._ID)
     int id;
   }
 
-  private static class InvalidCompoundObject {
+  public static class InvalidCompoundObject {
     @Column(BaseColumns._ID)
     int id;
 
@@ -82,5 +87,16 @@ public class OverridingColumnsTest {
   @Test(expected = IllegalArgumentException.class)
   public void shouldNotAllowObjectWithEmbeddedObjectWhichOverridesColumnAnnotationFromCompoundObject() throws Exception {
     testSubject.toContentValues(new InvalidCompoundObject());
+  }
+
+  @Test
+  public void shouldAllowReadingOneColumnIntoMultipleFields() throws Exception {
+    Cursor cursor = mock(Cursor.class);
+    when(cursor.getColumnIndexOrThrow(BaseColumns._ID)).thenReturn(0);
+    when(cursor.getColumnIndex(BaseColumns._ID)).thenReturn(0);
+    when(cursor.getInt(0)).thenReturn(5);
+    InvalidCompoundObject result = testSubject.fromCursor(cursor, InvalidCompoundObject.class);
+    assertThat(result.id).isEqualTo(5);
+    assertThat(result.mEmbeddedObject.id).isEqualTo(5);
   }
 }

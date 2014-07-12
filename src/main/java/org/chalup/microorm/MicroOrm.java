@@ -158,6 +158,7 @@ public class MicroOrm {
     Collection<FieldAdapter> fieldAdapters = Lists.newArrayList();
     Collection<EmbeddedFieldInitializer> fieldInitializers = Lists.newArrayList();
     Set<String> columns = Sets.newHashSet();
+    Set<String> duplicates = Sets.newHashSet();
 
     for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
       field.setAccessible(true);
@@ -174,7 +175,7 @@ public class MicroOrm {
 
         for (String newColumn : fieldAdapter.getColumnNames()) {
           if (!columns.add(newColumn)) {
-            throw new IllegalArgumentException("Duplicate column definition: " + newColumn);
+            duplicates.add(newColumn);
           }
         }
 
@@ -188,7 +189,7 @@ public class MicroOrm {
 
         for (String newColumn : fieldAdapter.getColumnNames()) {
           if (!columns.add(newColumn)) {
-            throw new IllegalArgumentException("Duplicate column definition: " + newColumn);
+            duplicates.add(newColumn);
           }
         }
 
@@ -197,7 +198,7 @@ public class MicroOrm {
       }
     }
 
-    return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers);
+    return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers, duplicates);
   }
 
   /**
