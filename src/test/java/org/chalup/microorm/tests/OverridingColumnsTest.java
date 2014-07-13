@@ -43,7 +43,7 @@ public class OverridingColumnsTest {
     testSubject = new MicroOrm();
   }
 
-  private static class InvalidObject {
+  public static class InvalidObject {
     @Column(BaseColumns._ID)
     int id;
 
@@ -61,7 +61,7 @@ public class OverridingColumnsTest {
     int id;
   }
 
-  private static class InvalidDerivedObject extends BaseObject {
+  public static class InvalidDerivedObject extends BaseObject {
     @Column(BaseColumns._ID)
     int id;
   }
@@ -95,8 +95,16 @@ public class OverridingColumnsTest {
     when(cursor.getColumnIndexOrThrow(BaseColumns._ID)).thenReturn(0);
     when(cursor.getColumnIndex(BaseColumns._ID)).thenReturn(0);
     when(cursor.getInt(0)).thenReturn(5);
-    InvalidCompoundObject result = testSubject.fromCursor(cursor, InvalidCompoundObject.class);
-    assertThat(result.id).isEqualTo(5);
-    assertThat(result.mEmbeddedObject.id).isEqualTo(5);
+
+    InvalidObject simpleObject = testSubject.fromCursor(cursor, InvalidObject.class);
+    assertThat(simpleObject.id).isEqualTo(5);
+    assertThat(simpleObject._id).isEqualTo(5);
+
+    InvalidDerivedObject derivedObject = testSubject.fromCursor(cursor, InvalidDerivedObject.class);
+    assertThat(derivedObject.id).isEqualTo(5);
+
+    InvalidCompoundObject compoundObject = testSubject.fromCursor(cursor, InvalidCompoundObject.class);
+    assertThat(compoundObject.id).isEqualTo(5);
+    assertThat(compoundObject.mEmbeddedObject.id).isEqualTo(5);
   }
 }
