@@ -17,8 +17,7 @@
 package org.chalup.microorm.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
@@ -29,6 +28,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
@@ -106,5 +106,60 @@ public class OverridingColumnsTest {
     ReadonlyCompoundObject compoundObject = testSubject.fromCursor(cursor, ReadonlyCompoundObject.class);
     assertThat(compoundObject.id).isEqualTo(5);
     assertThat(compoundObject.mEmbeddedObject.id).isEqualTo(5);
+  }
+
+  public static class WritableObjectWithDuplicateColumns {
+    @Column(BaseColumns._ID)
+    int id;
+
+    @Column(value = BaseColumns._ID, readonly = true)
+    int _id;
+  }
+
+  @Test
+  public void shouldAllowGettingContentValuesFromObjectWithDuplicateColumnAnnotationIfOnlyOneColumnIsNotReadonly() throws Exception {
+    WritableObjectWithDuplicateColumns object = new WritableObjectWithDuplicateColumns();
+    object.id = 2;
+    object._id = 1;
+
+    ContentValues values = testSubject.toContentValues(object);
+    assertThat(values.containsKey(BaseColumns._ID)).isTrue();
+    assertThat(values.getAsInteger(BaseColumns._ID)).isEqualTo(2);
+  }
+
+  public static class WritableDerivedObjectWithDuplicateColumns extends BaseObject {
+    @Column(value = BaseColumns._ID, readonly = true)
+    int _id;
+  }
+
+  @Test
+  public void shouldAllowGettingContentValuesFromObjectWhichOverridesColumnAnnotationFromBaseClassIfOnlyOneColumnIsNotReadonly() throws Exception {
+    WritableDerivedObjectWithDuplicateColumns object = new WritableDerivedObjectWithDuplicateColumns();
+    object.id = 2;
+    object._id = 1;
+
+    ContentValues values = testSubject.toContentValues(object);
+    assertThat(values.containsKey(BaseColumns._ID)).isTrue();
+    assertThat(values.getAsInteger(BaseColumns._ID)).isEqualTo(2);
+  }
+
+  public static class WritableCompoundObject {
+    @Column(value = BaseColumns._ID, readonly = true)
+    int id;
+
+    @Embedded
+    EmbeddedObject mEmbeddedObject;
+  }
+
+  @Test
+  public void shouldAllowGettingContentValuesFromObjectWithEmbeddedObjectWhichOverridesColumnAnnotationFromCompoundObjectIfOnlyOneColumnIsNotReadonly() throws Exception {
+    WritableCompoundObject object = new WritableCompoundObject();
+    object.id = 2;
+    object.mEmbeddedObject = new EmbeddedObject();
+    object.mEmbeddedObject.id = 1;
+
+    ContentValues values = testSubject.toContentValues(object);
+    assertThat(values.containsKey(BaseColumns._ID)).isTrue();
+    assertThat(values.getAsInteger(BaseColumns._ID)).isEqualTo(1);
   }
 }

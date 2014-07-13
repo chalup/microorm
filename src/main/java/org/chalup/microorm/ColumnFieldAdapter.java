@@ -58,4 +58,11 @@ class ColumnFieldAdapter extends FieldAdapter {
   public String[] getColumnNames() {
     return new String[] { mColumnName };
   }
+
+  @Override
+  public String[] getWritableColumnNames() {
+    return mReadonly
+        ? new String[0]
+        : getColumnNames();
+  }
 }

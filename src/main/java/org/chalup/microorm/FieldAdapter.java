@@ -40,4 +40,6 @@ abstract class FieldAdapter {
   protected abstract void putValueToContentValues(Object value, ContentValues outValues);
 
   public abstract String[] getColumnNames();
+
+  public abstract String[] getWritableColumnNames();
 }

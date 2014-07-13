@@ -45,4 +45,9 @@ class EmbeddedFieldAdapter extends FieldAdapter {
   public String[] getColumnNames() {
     return mDaoAdapter.getProjection();
   }
+
+  @Override
+  public String[] getWritableColumnNames() {
+    return mDaoAdapter.getWritableColumns();
+  }
 }

@@ -20,7 +20,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.chalup.microorm.annotations.Column;
 import org.chalup.microorm.annotations.Embedded;
@@ -32,7 +31,6 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This is the main class for using MicroOrm. MicroOrm is typically used by
@@ -157,8 +155,6 @@ public class MicroOrm {
   private <T> DaoAdapter<T> buildDaoAdapter(Class<T> klass) {
     Collection<FieldAdapter> fieldAdapters = Lists.newArrayList();
     Collection<EmbeddedFieldInitializer> fieldInitializers = Lists.newArrayList();
-    Set<String> columns = Sets.newHashSet();
-    Set<String> duplicates = Sets.newHashSet();
 
     for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
       field.setAccessible(true);
@@ -173,12 +169,6 @@ public class MicroOrm {
         }
         ColumnFieldAdapter fieldAdapter = new ColumnFieldAdapter(field, mTypeAdapters.get(field.getType()));
 
-        for (String newColumn : fieldAdapter.getColumnNames()) {
-          if (!columns.add(newColumn)) {
-            duplicates.add(newColumn);
-          }
-        }
-
         fieldAdapters.add(fieldAdapter);
       }
 
@@ -187,18 +177,12 @@ public class MicroOrm {
         DaoAdapter<?> daoAdapter = getAdapter(field.getType());
         EmbeddedFieldAdapter fieldAdapter = new EmbeddedFieldAdapter(field, daoAdapter);
 
-        for (String newColumn : fieldAdapter.getColumnNames()) {
-          if (!columns.add(newColumn)) {
-            duplicates.add(newColumn);
-          }
-        }
-
         fieldAdapters.add(fieldAdapter);
         fieldInitializers.add(new EmbeddedFieldInitializer(field, daoAdapter));
       }
     }
 
-    return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers, duplicates);
+    return new ReflectiveDaoAdapter<T>(klass, fieldAdapters, fieldInitializers);
   }
 
   /**
