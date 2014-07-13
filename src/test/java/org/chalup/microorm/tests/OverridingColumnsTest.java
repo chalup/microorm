@@ -43,7 +43,7 @@ public class OverridingColumnsTest {
     testSubject = new MicroOrm();
   }
 
-  public static class InvalidObject {
+  public static class ReadonlyObject {
     @Column(BaseColumns._ID)
     int id;
 
@@ -52,8 +52,8 @@ public class OverridingColumnsTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotAllowObjectWithDuplicateColumnAnnotation() throws Exception {
-    testSubject.toContentValues(new InvalidObject());
+  public void shouldNotAllowGettingContentValuesFromObjectWithDuplicateColumnAnnotation() throws Exception {
+    testSubject.toContentValues(new ReadonlyObject());
   }
 
   private static class BaseObject {
@@ -61,14 +61,14 @@ public class OverridingColumnsTest {
     int id;
   }
 
-  public static class InvalidDerivedObject extends BaseObject {
+  public static class ReadonlyDerivedObject extends BaseObject {
     @Column(BaseColumns._ID)
     int id;
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotAllowObjectWhichOverridesColumnAnnotationFromBaseClass() throws Exception {
-    testSubject.toContentValues(new InvalidDerivedObject());
+  public void shouldNotAllowGettingContentValuesFromObjectWhichOverridesColumnAnnotationFromBaseClass() throws Exception {
+    testSubject.toContentValues(new ReadonlyDerivedObject());
   }
 
   public static class EmbeddedObject {
@@ -76,7 +76,7 @@ public class OverridingColumnsTest {
     int id;
   }
 
-  public static class InvalidCompoundObject {
+  public static class ReadonlyCompoundObject {
     @Column(BaseColumns._ID)
     int id;
 
@@ -85,8 +85,8 @@ public class OverridingColumnsTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void shouldNotAllowObjectWithEmbeddedObjectWhichOverridesColumnAnnotationFromCompoundObject() throws Exception {
-    testSubject.toContentValues(new InvalidCompoundObject());
+  public void shouldNotAllowGettingContentValuesFromObjectWithEmbeddedObjectWhichOverridesColumnAnnotationFromCompoundObject() throws Exception {
+    testSubject.toContentValues(new ReadonlyCompoundObject());
   }
 
   @Test
@@ -96,14 +96,14 @@ public class OverridingColumnsTest {
     when(cursor.getColumnIndex(BaseColumns._ID)).thenReturn(0);
     when(cursor.getInt(0)).thenReturn(5);
 
-    InvalidObject simpleObject = testSubject.fromCursor(cursor, InvalidObject.class);
+    ReadonlyObject simpleObject = testSubject.fromCursor(cursor, ReadonlyObject.class);
     assertThat(simpleObject.id).isEqualTo(5);
     assertThat(simpleObject._id).isEqualTo(5);
 
-    InvalidDerivedObject derivedObject = testSubject.fromCursor(cursor, InvalidDerivedObject.class);
+    ReadonlyDerivedObject derivedObject = testSubject.fromCursor(cursor, ReadonlyDerivedObject.class);
     assertThat(derivedObject.id).isEqualTo(5);
 
-    InvalidCompoundObject compoundObject = testSubject.fromCursor(cursor, InvalidCompoundObject.class);
+    ReadonlyCompoundObject compoundObject = testSubject.fromCursor(cursor, ReadonlyCompoundObject.class);
     assertThat(compoundObject.id).isEqualTo(5);
     assertThat(compoundObject.mEmbeddedObject.id).isEqualTo(5);
   }
