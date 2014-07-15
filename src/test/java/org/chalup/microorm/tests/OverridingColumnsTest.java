@@ -162,4 +162,23 @@ public class OverridingColumnsTest {
     assertThat(values.containsKey(BaseColumns._ID)).isTrue();
     assertThat(values.getAsInteger(BaseColumns._ID)).isEqualTo(1);
   }
+
+  public static class InvalidObjectWithDuplicateTreatNullAsDefaultColumns {
+    @Column(value = BaseColumns._ID, treatNullAsDefault = true)
+    Long id;
+
+    @Column(value = BaseColumns._ID, treatNullAsDefault = true)
+    Long _id;
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldIgnoreTreatNullAsDefaultWhenGettingContentValuesFromObjectWithDuplicateColumnAnnotation() throws Exception {
+    testSubject.toContentValues(new InvalidObjectWithDuplicateTreatNullAsDefaultColumns());
+
+    // One might argue that in this case toContentValues() should work, because
+    // both Columns containing null are ignored, but it would complicate the
+    // implementation and mental usage model.
+    //
+    // The annotated class is either readonly or read-write, regardless of data it holds.
+  }
 }
