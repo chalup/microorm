@@ -27,4 +27,6 @@ interface DaoAdapter<T> {
   ContentValues toContentValues(ContentValues values, T object);
 
   String[] getProjection();
+
+  String[] getWritableColumns();
 }
