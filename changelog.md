@@ -1,8 +1,9 @@
 Change Log
 ==========
 
-HEAD
-----
+
+Version 0.5.0 *(2014-09-19)*
+----------------------------
 
  * Allow duplicate `@Column` annotation, with following restriction: you can get `ContentValues` from object with duplicate `@Column`s only if at most one `@Column` is `readonly=false`.
 
