@@ -17,6 +17,7 @@
 package org.chalup.microorm;
 
 import com.google.common.base.Function;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -124,6 +125,46 @@ public class MicroOrm {
       @Override
       public T apply(Cursor c) {
         return mAdapter.fromCursor(c, mAdapter.createInstance());
+      }
+    };
+  }
+
+  /**
+   * Constructs {@link Function} converting single column in {@link Cursor}
+   * row into object of given type. You can get builder instances with
+   * {@link org.chalup.microorm.MicroOrm#getColumn(String)}.
+   */
+  public interface ColumnFunctionBuilder {
+    /**
+     * @param <T> the type of the requested object
+     * @param klass The {@link Class} of the function output type
+     * @return the {@link Function} converting {@link Cursor} row into object
+     * of type T using {@link TypeAdapter}s registered in current
+     */
+    <T> Function<Cursor, T> as(Class<T> klass);
+  }
+
+  /**
+   * Constructs new {@link ColumnFunctionBuilder} for specified
+   * {@code columnName}.
+   */
+  public ColumnFunctionBuilder getColumn(final String columnName) {
+    Preconditions.checkNotNull(columnName);
+
+    return new ColumnFunctionBuilder() {
+      @SuppressWarnings("unchecked")
+      @Override
+      public <T> Function<Cursor, T> as(Class<T> klass) {
+        Preconditions.checkArgument(mTypeAdapters.containsKey(klass));
+
+        final TypeAdapter<T> adapter = (TypeAdapter<T>) mTypeAdapters.get(klass);
+
+        return new Function<Cursor, T>() {
+          @Override
+          public T apply(Cursor c) {
+            return adapter.fromCursor(c, columnName);
+          }
+        };
       }
     };
   }
