@@ -16,7 +16,7 @@
 
 package org.chalup.microorm.tests;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
@@ -83,6 +83,6 @@ public class GetFunctionTest {
       fromFunction.add(function.apply(cursor));
     } while (cursor.moveToNext());
 
-    assertThat(fromFunction).containsSequence(reference.toArray());
+    assertThat(fromFunction).containsSequence(reference);
   }
 }

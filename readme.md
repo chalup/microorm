@@ -100,13 +100,15 @@ Caveats
 * Current implementation is roughly 2-2.5 times slower than handrolled methods.
 
 
-Building
---------
-This is standard maven project. To build it just execute:
-```shell
-mvn clean package
+Usage
+-----
+Just add the dependency to your `build.gradle`:
+
+```groovy
+dependencies {
+    compile 'org.chalup.microorm:microorm:0.5'
+}
 ```
-in directory with pom.xml.
 
 minSdkVersion = 10
 ------------------

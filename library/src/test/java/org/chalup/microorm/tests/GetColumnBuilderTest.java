@@ -16,7 +16,7 @@
 
 package org.chalup.microorm.tests;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;

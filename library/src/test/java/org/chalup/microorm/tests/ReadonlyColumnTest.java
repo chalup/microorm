@@ -16,7 +16,7 @@
 
 package org.chalup.microorm.tests;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
@@ -72,8 +72,8 @@ public class ReadonlyColumnTest {
   public void shouldIncludeReadonlyColumnInProjection() throws Exception {
     String[] projection = testSubject.getProjection(ObjectWithReadonlyColumn.class);
 
-    assertThat(projection).contains("readonly_column");
-    assertThat(projection).contains("regular_column");
+    assertThat(projection).asList().contains("readonly_column");
+    assertThat(projection).asList().contains("regular_column");
   }
 
   @Test

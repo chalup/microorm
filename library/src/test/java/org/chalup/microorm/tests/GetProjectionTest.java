@@ -16,9 +16,7 @@
 
 package org.chalup.microorm.tests;
 
-import static org.fest.assertions.Assertions.assertThat;
-
-import com.google.common.collect.Sets;
+import static com.google.common.truth.Truth.assertThat;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
@@ -28,8 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.HashSet;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -58,7 +54,7 @@ public class GetProjectionTest {
     String[] projection = testSubject.getProjection(SimpleEntity.class);
 
     assertThat(projection).isNotNull();
-    assertThat(Sets.newHashSet(projection)).contains(SIMPLE_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(SIMPLE_ENTITY_COLUMN);
   }
 
   public static class DerivedEntity extends SimpleEntity {
@@ -72,9 +68,8 @@ public class GetProjectionTest {
 
     assertThat(projection).isNotNull();
 
-    HashSet<String> projectionAsSet = Sets.newHashSet(projection);
-    assertThat(projectionAsSet).contains(DERIVED_ENTITY_COLUMN);
-    assertThat(projectionAsSet).contains(SIMPLE_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(DERIVED_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(SIMPLE_ENTITY_COLUMN);
   }
 
   public static class EmbeddedEntity {
@@ -99,9 +94,8 @@ public class GetProjectionTest {
 
     assertThat(projection).isNotNull();
 
-    HashSet<String> projectionAsSet = Sets.newHashSet(projection);
-    assertThat(projectionAsSet).contains(CONTAINER_ENTITY_COLUMN);
-    assertThat(projectionAsSet).contains(EMBEDDED_ENTITY_COLUMN);
-    assertThat(projectionAsSet).contains(ANOTHER_EMBEDDED_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(CONTAINER_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(EMBEDDED_ENTITY_COLUMN);
+    assertThat(projection).asList().contains(ANOTHER_EMBEDDED_ENTITY_COLUMN);
   }
 }
