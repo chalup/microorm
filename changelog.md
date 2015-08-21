@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-HEAD
-----
+Version 0.6.0 *(2015-08-21)*
+----------------------------
 
  * Added `getColumn(String).as(Class<T>)` method returning deserialization `Function<Cursor, T>` which uses custom type adapters registered in MicroOrm instance.
  * Migrate to Gradle
