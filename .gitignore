@@ -23,3 +23,7 @@ out
 
 #maven
 target
+
+.gradle
+.DS_Store
+build

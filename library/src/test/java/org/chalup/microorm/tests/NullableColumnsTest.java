@@ -16,7 +16,7 @@
 
 package org.chalup.microorm.tests;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static com.google.common.truth.Truth.assertThat;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
