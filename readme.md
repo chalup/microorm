@@ -106,7 +106,7 @@ Just add the dependency to your `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'org.chalup.microorm:microorm:0.5'
+    compile 'org.chalup.microorm:microorm:0.6.0'
 }
 ```
 
