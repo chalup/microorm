@@ -19,7 +19,6 @@ package org.chalup.microorm.tests;
 import static com.google.common.truth.Truth.assertThat;
 import static org.fest.assertions.api.ANDROID.assertThat;
 import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
-import static org.mockito.Mockito.*;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
@@ -54,11 +53,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackShortFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(ShortDao.SHORT_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(ShortDao.SHORT_COLUMN)).thenReturn(0);
-    when(c.getShort(0)).thenReturn(ShortDao.TEST_SHORT);
+    Cursor c = TestCursorBuilder
+        .cursor(ShortDao.SHORT_COLUMN)
+        .addRow(ShortDao.TEST_SHORT);
 
     ShortDao shortDao = testSubject.fromCursor(c, ShortDao.class);
     assertThat(shortDao.mShort).isEqualTo(ShortDao.TEST_SHORT);
@@ -83,11 +80,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackIntFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(IntegerDao.INTEGER_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(IntegerDao.INTEGER_COLUMN)).thenReturn(0);
-    when(c.getInt(0)).thenReturn(IntegerDao.TEST_INT);
+    Cursor c = TestCursorBuilder
+        .cursor(IntegerDao.INTEGER_COLUMN)
+        .addRow(IntegerDao.TEST_INT);
 
     IntegerDao integerDao = testSubject.fromCursor(c, IntegerDao.class);
     assertThat(integerDao.mInt).isEqualTo(IntegerDao.TEST_INT);
@@ -112,11 +107,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackLongFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(LongDao.LONG_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(LongDao.LONG_COLUMN)).thenReturn(0);
-    when(c.getLong(0)).thenReturn(LongDao.TEST_LONG);
+    Cursor c = TestCursorBuilder
+        .cursor(LongDao.LONG_COLUMN)
+        .addRow(LongDao.TEST_LONG);
 
     LongDao longDao = testSubject.fromCursor(c, LongDao.class);
     assertThat(longDao.mLong).isEqualTo(LongDao.TEST_LONG);
@@ -141,11 +134,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackFloatFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(FloatDao.FLOAT_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(FloatDao.FLOAT_COLUMN)).thenReturn(0);
-    when(c.getFloat(0)).thenReturn(FloatDao.TEST_FLOAT);
+    Cursor c = TestCursorBuilder
+        .cursor(FloatDao.FLOAT_COLUMN)
+        .addRow(FloatDao.TEST_FLOAT);
 
     FloatDao floatDao = testSubject.fromCursor(c, FloatDao.class);
     assertThat(floatDao.mFloat).isEqualTo(FloatDao.TEST_FLOAT);
@@ -170,11 +161,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackDoubleFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(DoubleDao.DOUBLE_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(DoubleDao.DOUBLE_COLUMN)).thenReturn(0);
-    when(c.getDouble(0)).thenReturn(DoubleDao.TEST_DOUBLE);
+    Cursor c = TestCursorBuilder
+        .cursor(DoubleDao.DOUBLE_COLUMN)
+        .addRow(DoubleDao.TEST_DOUBLE);
 
     DoubleDao doubleDao = testSubject.fromCursor(c, DoubleDao.class);
     assertThat(doubleDao.mDouble).isEqualTo(DoubleDao.TEST_DOUBLE);
@@ -202,15 +191,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBooleanFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BooleanDao.TRUE_BOOLEAN_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BooleanDao.TRUE_BOOLEAN_COLUMN)).thenReturn(0);
-    when(c.getInt(0)).thenReturn(1);
-
-    when(c.getColumnIndex(BooleanDao.FALSE_BOOLEAN_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BooleanDao.FALSE_BOOLEAN_COLUMN)).thenReturn(1);
-    when(c.getInt(1)).thenReturn(0);
+    Cursor c = TestCursorBuilder
+        .cursor(BooleanDao.TRUE_BOOLEAN_COLUMN, BooleanDao.FALSE_BOOLEAN_COLUMN)
+        .addRow(1, 0);
 
     BooleanDao booleanDao = testSubject.fromCursor(c, BooleanDao.class);
     assertThat(booleanDao.mTrueBoolean).isTrue();
@@ -242,16 +225,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedShortFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedShortDao.SHORT_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedShortDao.SHORT_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getShort(0)).thenReturn(BoxedShortDao.TEST_SHORT);
-
-    when(c.getColumnIndex(BoxedShortDao.NULL_SHORT_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedShortDao.NULL_SHORT_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedShortDao.SHORT_COLUMN, BoxedShortDao.NULL_SHORT_COLUMN)
+        .addRow(BoxedShortDao.TEST_SHORT, null);
 
     BoxedShortDao boxedShortDao = testSubject.fromCursor(c, BoxedShortDao.class);
     assertThat(boxedShortDao.mShort).isEqualTo(BoxedShortDao.TEST_SHORT);
@@ -282,16 +258,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedIntFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedIntegerDao.INTEGER_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedIntegerDao.INTEGER_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getInt(0)).thenReturn(BoxedIntegerDao.TEST_INT);
-
-    when(c.getColumnIndex(BoxedIntegerDao.NULL_INTEGER_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedIntegerDao.NULL_INTEGER_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedIntegerDao.INTEGER_COLUMN, BoxedIntegerDao.NULL_INTEGER_COLUMN)
+        .addRow(BoxedIntegerDao.TEST_INT, null);
 
     BoxedIntegerDao boxedIntegerDao = testSubject.fromCursor(c, BoxedIntegerDao.class);
     assertThat(boxedIntegerDao.mInt).isEqualTo(BoxedIntegerDao.TEST_INT);
@@ -322,16 +291,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedLongFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedLongDao.LONG_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedLongDao.LONG_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getLong(0)).thenReturn(BoxedLongDao.TEST_LONG);
-
-    when(c.getColumnIndex(BoxedLongDao.NULL_LONG_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedLongDao.NULL_LONG_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedLongDao.LONG_COLUMN, BoxedLongDao.NULL_LONG_COLUMN)
+        .addRow(BoxedLongDao.TEST_LONG, null);
 
     BoxedLongDao boxedLongDao = testSubject.fromCursor(c, BoxedLongDao.class);
     assertThat(boxedLongDao.mLong).isEqualTo(BoxedLongDao.TEST_LONG);
@@ -363,16 +325,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedFloatFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedFloatDao.FLOAT_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedFloatDao.FLOAT_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getFloat(0)).thenReturn(BoxedFloatDao.TEST_FLOAT);
-
-    when(c.getColumnIndex(BoxedFloatDao.NULL_FLOAT_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedFloatDao.NULL_FLOAT_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedFloatDao.FLOAT_COLUMN, BoxedFloatDao.NULL_FLOAT_COLUMN)
+        .addRow(BoxedFloatDao.TEST_FLOAT, null);
 
     BoxedFloatDao boxedFloatDao = testSubject.fromCursor(c, BoxedFloatDao.class);
     assertThat(boxedFloatDao.mFloat).isEqualTo(BoxedFloatDao.TEST_FLOAT);
@@ -403,16 +358,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedDoubleFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedDoubleDao.DOUBLE_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedDoubleDao.DOUBLE_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getDouble(0)).thenReturn(BoxedDoubleDao.TEST_DOUBLE);
-
-    when(c.getColumnIndex(BoxedDoubleDao.NULL_DOUBLE_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedDoubleDao.NULL_DOUBLE_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedDoubleDao.DOUBLE_COLUMN, BoxedDoubleDao.NULL_DOUBLE_COLUMN)
+        .addRow(BoxedDoubleDao.TEST_DOUBLE, null);
 
     BoxedDoubleDao boxedDoubleDao = testSubject.fromCursor(c, BoxedDoubleDao.class);
     assertThat(boxedDoubleDao.mDouble).isEqualTo(BoxedDoubleDao.TEST_DOUBLE);
@@ -446,21 +394,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackBoxedBooleanFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BoxedBooleanDao.TRUE_BOOLEAN_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BoxedBooleanDao.TRUE_BOOLEAN_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getInt(0)).thenReturn(1);
-
-    when(c.getColumnIndex(BoxedBooleanDao.FALSE_BOOLEAN_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(BoxedBooleanDao.FALSE_BOOLEAN_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.FALSE);
-    when(c.getInt(1)).thenReturn(0);
-
-    when(c.getColumnIndex(BoxedBooleanDao.NULL_BOOLEAN_COLUMN)).thenReturn(2);
-    when(c.getColumnIndexOrThrow(BoxedBooleanDao.NULL_BOOLEAN_COLUMN)).thenReturn(2);
-    when(c.isNull(2)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(BoxedBooleanDao.TRUE_BOOLEAN_COLUMN, BoxedBooleanDao.FALSE_BOOLEAN_COLUMN, BoxedBooleanDao.NULL_BOOLEAN_COLUMN)
+        .addRow(1, 0, null);
 
     BoxedBooleanDao boxedBooleanDao = testSubject.fromCursor(c, BoxedBooleanDao.class);
     assertThat(boxedBooleanDao.mTrueBoolean).isTrue();
@@ -494,16 +430,9 @@ public class BasicTypesTest {
 
   @Test
   public void shouldUnpackStringFieldsFromCursor() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(StringDao.STRING_COLUMN)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(StringDao.STRING_COLUMN)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getString(0)).thenReturn(StringDao.TEST_STRING);
-
-    when(c.getColumnIndex(StringDao.NULL_STRING_COLUMN)).thenReturn(1);
-    when(c.getColumnIndexOrThrow(StringDao.NULL_STRING_COLUMN)).thenReturn(1);
-    when(c.isNull(1)).thenReturn(Boolean.TRUE);
+    Cursor c = TestCursorBuilder
+        .cursor(StringDao.STRING_COLUMN, StringDao.NULL_STRING_COLUMN)
+        .addRow(StringDao.TEST_STRING, null);
 
     StringDao stringDao = testSubject.fromCursor(c, StringDao.class);
     assertThat(stringDao.mString).isEqualTo(StringDao.TEST_STRING);
@@ -532,12 +461,7 @@ public class BasicTypesTest {
 
   @Test(expected = AssertionError.class)
   public void cannotHandleObjectWithNonDefaultConstructorsOnly() throws Exception {
-    Cursor c = mock(Cursor.class);
-
-    when(c.getColumnIndex(BaseColumns._ID)).thenReturn(0);
-    when(c.getColumnIndexOrThrow(BaseColumns._ID)).thenReturn(0);
-    when(c.isNull(0)).thenReturn(Boolean.FALSE);
-    when(c.getLong(0)).thenReturn(1500L);
+    Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
 
     testSubject.fromCursor(c, InvalidObjectWithNonDefaultConstructor.class);
   }
