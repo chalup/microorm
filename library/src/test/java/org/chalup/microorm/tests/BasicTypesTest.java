@@ -31,6 +31,7 @@ import org.robolectric.annotation.Config;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -518,5 +519,26 @@ public class BasicTypesTest {
     ContentValues values = testSubject.toContentValues(stringDao);
     assertThat(values).contains(entry(StringDao.STRING_COLUMN, StringDao.TEST_STRING));
     assertThat(values).contains(entry(StringDao.NULL_STRING_COLUMN, null));
+  }
+
+  public static class InvalidObjectWithNonDefaultConstructor {
+    public InvalidObjectWithNonDefaultConstructor(long id) {
+      this.id = id;
+    }
+
+    @Column(BaseColumns._ID)
+    long id;
+  }
+
+  @Test(expected = AssertionError.class)
+  public void cannotHandleObjectWithNonDefaultConstructorsOnly() throws Exception {
+    Cursor c = mock(Cursor.class);
+
+    when(c.getColumnIndex(BaseColumns._ID)).thenReturn(0);
+    when(c.getColumnIndexOrThrow(BaseColumns._ID)).thenReturn(0);
+    when(c.isNull(0)).thenReturn(Boolean.FALSE);
+    when(c.getLong(0)).thenReturn(1500L);
+
+    testSubject.fromCursor(c, InvalidObjectWithNonDefaultConstructor.class);
   }
 }
