@@ -19,26 +19,26 @@ package org.chalup.microorm;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Sets;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.Collection;
 import java.util.Set;
 
 class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
-  private final Collection<EmbeddedFieldInitializer> mFieldInitializers;
+  private final ImmutableList<EmbeddedFieldInitializer> mFieldInitializers;
   private final ImmutableList<String> mProjection;
   private final ImmutableList<String> mWritableColumns;
   private final ImmutableSet<String> mWritableDuplicates;
 
-  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers) {
+  ReflectiveDaoAdapter(Class<T> klass, ImmutableList<FieldAdapter> fieldAdapters, ImmutableList<EmbeddedFieldInitializer> fieldInitializers) {
     mKlass = klass;
-    mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
+    mFieldAdapters = fieldAdapters;
     mFieldInitializers = fieldInitializers;
 
     ImmutableList.Builder<String> projectionBuilder = ImmutableList.builder();
@@ -50,11 +50,11 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     }
     mProjection = projectionBuilder.build();
     mWritableColumns = writableColumnsBuilder.build();
-    mWritableDuplicates = ImmutableSet.copyOf(findDuplicates(mWritableColumns));
+    mWritableDuplicates = findDuplicates(mWritableColumns);
   }
 
-  private static <T> Set<T> findDuplicates(Iterable<T> iterable) {
-    final Set<T> result = Sets.newHashSet();
+  private static <T> ImmutableSet<T> findDuplicates(Iterable<T> iterable) {
+    final Builder<T> result = ImmutableSet.builder();
     final Set<T> uniques = Sets.newHashSet();
 
     for (T element : iterable) {
@@ -63,7 +63,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
       }
     }
 
-    return result;
+    return result.build();
   }
 
   @Override
