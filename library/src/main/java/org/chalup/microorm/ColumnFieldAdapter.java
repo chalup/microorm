@@ -28,6 +28,7 @@ class ColumnFieldAdapter extends FieldAdapter {
   private static final String[] EMPTY_ARRAY = new String[0];
 
   private final String mColumnName;
+  private final String[] mColumnNames;
   private final TypeAdapter<?> mTypeAdapter;
   private final boolean mTreatNullAsDefault;
   private final boolean mReadonly;
@@ -38,6 +39,7 @@ class ColumnFieldAdapter extends FieldAdapter {
 
     Column columnAnnotation = field.getAnnotation(Column.class);
     mColumnName = columnAnnotation.value();
+    mColumnNames = new String[] { mColumnName };
     mTreatNullAsDefault = columnAnnotation.treatNullAsDefault();
     mReadonly = columnAnnotation.readonly();
   }
@@ -58,7 +60,7 @@ class ColumnFieldAdapter extends FieldAdapter {
 
   @Override
   public String[] getColumnNames() {
-    return new String[] { mColumnName };
+    return mColumnNames;
   }
 
   @Override
