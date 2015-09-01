@@ -107,14 +107,14 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     if (!mWritableDuplicates.isEmpty()) {
       throw new IllegalArgumentException("Duplicate columns definitions: " + Joiner.on(", ").join(mWritableDuplicates));
     }
-    for (FieldAdapter fieldAdapter : mFieldAdapters) {
-      try {
+    try {
+      for (FieldAdapter fieldAdapter : mFieldAdapters) {
         fieldAdapter.putToContentValues(object, values);
-      } catch (IllegalArgumentException e) {
-        throw new AssertionError(e);
-      } catch (IllegalAccessException e) {
-        throw new AssertionError(e);
       }
+    } catch (IllegalArgumentException e) {
+      throw new AssertionError(e);
+    } catch (IllegalAccessException e) {
+      throw new AssertionError(e);
     }
 
     return values;
