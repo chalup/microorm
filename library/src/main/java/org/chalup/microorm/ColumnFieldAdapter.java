@@ -25,6 +25,8 @@ import java.lang.reflect.Field;
 
 class ColumnFieldAdapter extends FieldAdapter {
 
+  private static final String[] EMPTY_ARRAY = new String[0];
+
   private final String mColumnName;
   private final TypeAdapter<?> mTypeAdapter;
   private final boolean mTreatNullAsDefault;
@@ -62,7 +64,7 @@ class ColumnFieldAdapter extends FieldAdapter {
   @Override
   public String[] getWritableColumnNames() {
     return mReadonly
-        ? new String[0]
+        ? EMPTY_ARRAY
         : getColumnNames();
   }
 }
