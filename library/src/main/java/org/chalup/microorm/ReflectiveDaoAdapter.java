@@ -121,6 +121,11 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   }
 
   @Override
+  public ContentValues createContentValues() {
+    return new ContentValues(mWritableColumns.length);
+  }
+
+  @Override
   public String[] getProjection() {
     return mProjection.clone();
   }

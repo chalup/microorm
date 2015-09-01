@@ -82,7 +82,8 @@ public class MicroOrm {
    */
   @SuppressWarnings("unchecked")
   public <T> ContentValues toContentValues(T object) {
-    return ((DaoAdapter<T>) getAdapter(object.getClass())).toContentValues(new ContentValues(), object);
+    DaoAdapter<T> adapter = (DaoAdapter<T>) getAdapter(object.getClass());
+    return adapter.toContentValues(adapter.createContentValues(), object);
   }
 
   /**
