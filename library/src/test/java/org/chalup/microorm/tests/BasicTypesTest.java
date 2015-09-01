@@ -465,4 +465,11 @@ public class BasicTypesTest {
 
     testSubject.fromCursor(c, InvalidObjectWithNonDefaultConstructor.class);
   }
+
+  @Test(expected = AssertionError.class)
+  public void cannotHandleObjectWithNonPublicDefaultConstructor() throws Exception {
+    Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
+
+    testSubject.fromCursor(c, InvalidObjectWithNotAccessibleConstructor.class);
+  }
 }
