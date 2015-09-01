@@ -25,6 +25,7 @@ import com.google.common.collect.Sets;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.Collection;
 import java.util.Set;
 
 class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
@@ -32,8 +33,8 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
   private final ImmutableList<EmbeddedFieldInitializer> mFieldInitializers;
-  private final ImmutableList<String> mProjection;
-  private final ImmutableList<String> mWritableColumns;
+  private final String[] mProjection;
+  private final String[] mWritableColumns;
   private final ImmutableSet<String> mWritableDuplicates;
 
   ReflectiveDaoAdapter(Class<T> klass, ImmutableList<FieldAdapter> fieldAdapters, ImmutableList<EmbeddedFieldInitializer> fieldInitializers) {
@@ -48,16 +49,20 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
       projectionBuilder.add(fieldAdapter.getColumnNames());
       writableColumnsBuilder.add(fieldAdapter.getWritableColumnNames());
     }
-    mProjection = projectionBuilder.build();
-    mWritableColumns = writableColumnsBuilder.build();
+    mProjection = array(projectionBuilder.build());
+    mWritableColumns = array(writableColumnsBuilder.build());
     mWritableDuplicates = findDuplicates(mWritableColumns);
   }
 
-  private static <T> ImmutableSet<T> findDuplicates(Iterable<T> iterable) {
+  private static String[] array(Collection<String> collection) {
+    return collection.toArray(new String[collection.size()]);
+  }
+
+  private static <T> ImmutableSet<T> findDuplicates(T[] array) {
     final Builder<T> result = ImmutableSet.builder();
     final Set<T> uniques = Sets.newHashSet();
 
-    for (T element : iterable) {
+    for (T element : array) {
       if (!uniques.add(element)) {
         result.add(element);
       }
@@ -117,11 +122,11 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   @Override
   public String[] getProjection() {
-    return mProjection.toArray(new String[mProjection.size()]);
+    return mProjection.clone();
   }
 
   @Override
   public String[] getWritableColumns() {
-    return mWritableColumns.toArray(new String[mWritableColumns.size()]);
+    return mWritableColumns.clone();
   }
 }
