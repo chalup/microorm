@@ -19,7 +19,10 @@ package org.chalup.microorm;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-abstract class TypeAdapters {
+final class TypeAdapters {
+  private TypeAdapters() {
+  }
+
   public static class StringAdapter implements TypeAdapter<String> {
     @Override
     public String fromCursor(Cursor c, String columnName) {
