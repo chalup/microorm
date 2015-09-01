@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-  compile 'com.google.guava:guava:16.0'
+  compile 'com.google.guava:guava:18.0'
 
   testCompile('junit:junit:4.11') {
     exclude module: 'hamcrest-core'
