@@ -19,6 +19,7 @@ package org.chalup.microorm;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Sets;
 
 import android.content.ContentValues;
@@ -31,14 +32,14 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   private final Class<T> mKlass;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
-  private final Collection<EmbeddedFieldInitializer> mFieldInitializers;
-  private final ImmutableList<String> mProjection;
-  private final ImmutableList<String> mWritableColumns;
+  private final ImmutableList<EmbeddedFieldInitializer> mFieldInitializers;
+  private final String[] mProjection;
+  private final String[] mWritableColumns;
   private final ImmutableSet<String> mWritableDuplicates;
 
-  ReflectiveDaoAdapter(Class<T> klass, Collection<FieldAdapter> fieldAdapters, Collection<EmbeddedFieldInitializer> fieldInitializers) {
+  ReflectiveDaoAdapter(Class<T> klass, ImmutableList<FieldAdapter> fieldAdapters, ImmutableList<EmbeddedFieldInitializer> fieldInitializers) {
     mKlass = klass;
-    mFieldAdapters = ImmutableList.copyOf(fieldAdapters);
+    mFieldAdapters = fieldAdapters;
     mFieldInitializers = fieldInitializers;
 
     ImmutableList.Builder<String> projectionBuilder = ImmutableList.builder();
@@ -48,22 +49,26 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
       projectionBuilder.add(fieldAdapter.getColumnNames());
       writableColumnsBuilder.add(fieldAdapter.getWritableColumnNames());
     }
-    mProjection = projectionBuilder.build();
-    mWritableColumns = writableColumnsBuilder.build();
-    mWritableDuplicates = ImmutableSet.copyOf(findDuplicates(mWritableColumns));
+    mProjection = array(projectionBuilder.build());
+    mWritableColumns = array(writableColumnsBuilder.build());
+    mWritableDuplicates = findDuplicates(mWritableColumns);
   }
 
-  private static <T> Set<T> findDuplicates(Iterable<T> iterable) {
-    final Set<T> result = Sets.newHashSet();
+  private static String[] array(Collection<String> collection) {
+    return collection.toArray(new String[collection.size()]);
+  }
+
+  private static <T> ImmutableSet<T> findDuplicates(T[] array) {
+    final Builder<T> result = ImmutableSet.builder();
     final Set<T> uniques = Sets.newHashSet();
 
-    for (T element : iterable) {
+    for (T element : array) {
       if (!uniques.add(element)) {
         result.add(element);
       }
     }
 
-    return result;
+    return result.build();
   }
 
   @Override
@@ -102,26 +107,31 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
     if (!mWritableDuplicates.isEmpty()) {
       throw new IllegalArgumentException("Duplicate columns definitions: " + Joiner.on(", ").join(mWritableDuplicates));
     }
-    for (FieldAdapter fieldAdapter : mFieldAdapters) {
-      try {
+    try {
+      for (FieldAdapter fieldAdapter : mFieldAdapters) {
         fieldAdapter.putToContentValues(object, values);
-      } catch (IllegalArgumentException e) {
-        throw new AssertionError(e);
-      } catch (IllegalAccessException e) {
-        throw new AssertionError(e);
       }
+    } catch (IllegalArgumentException e) {
+      throw new AssertionError(e);
+    } catch (IllegalAccessException e) {
+      throw new AssertionError(e);
     }
 
     return values;
   }
 
   @Override
+  public ContentValues createContentValues() {
+    return new ContentValues(mWritableColumns.length);
+  }
+
+  @Override
   public String[] getProjection() {
-    return mProjection.toArray(new String[mProjection.size()]);
+    return mProjection.clone();
   }
 
   @Override
   public String[] getWritableColumns() {
-    return mWritableColumns.toArray(new String[mWritableColumns.size()]);
+    return mWritableColumns.clone();
   }
 }

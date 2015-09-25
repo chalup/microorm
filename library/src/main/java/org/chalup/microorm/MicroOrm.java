@@ -18,6 +18,7 @@ package org.chalup.microorm;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -29,7 +30,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +82,8 @@ public class MicroOrm {
    */
   @SuppressWarnings("unchecked")
   public <T> ContentValues toContentValues(T object) {
-    return ((DaoAdapter<T>) getAdapter(object.getClass())).toContentValues(new ContentValues(), object);
+    DaoAdapter<T> adapter = (DaoAdapter<T>) getAdapter(object.getClass());
+    return adapter.toContentValues(adapter.createContentValues(), object);
   }
 
   /**
@@ -194,8 +195,8 @@ public class MicroOrm {
   }
 
   private <T> DaoAdapter<T> buildDaoAdapter(Class<T> klass) {
-    Collection<FieldAdapter> fieldAdapters = Lists.newArrayList();
-    Collection<EmbeddedFieldInitializer> fieldInitializers = Lists.newArrayList();
+    ImmutableList.Builder<FieldAdapter> fieldAdapters = ImmutableList.builder();
+    ImmutableList.Builder<EmbeddedFieldInitializer> fieldInitializers = ImmutableList.builder();
 
     for (Field field : Fields.allFieldsIncludingPrivateAndSuper(klass)) {
       field.setAccessible(true);
@@ -223,7 +224,7 @@ public class MicroOrm {
       }
     }
 
-    return new ReflectiveDaoAdapter<>(klass, fieldAdapters, fieldInitializers);
+    return new ReflectiveDaoAdapter<>(klass, fieldAdapters.build(), fieldInitializers.build());
   }
 
   /**
