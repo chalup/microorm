@@ -50,7 +50,7 @@ public class MicroOrm {
    * {@link Cursor}.
    *
    * @param <T> the type of the desired object
-   * @param c a valid {@link Cursor}
+   * @param c an open {@link Cursor} with position set to valid row
    * @param klass The {@link Class} of the desired object
    * @return an object of type T created from the current row in {@link Cursor}
    */
@@ -64,7 +64,7 @@ public class MicroOrm {
    * {@link Cursor}.
    *
    * @param <T> the type of the provided object
-   * @param c a valid {@link Cursor}
+   * @param c an open {@link Cursor} with position set to valid row
    * @param object the instance to be filled with data
    * @return the same object for easy chaining
    */
