@@ -472,4 +472,11 @@ public class BasicTypesTest {
 
     testSubject.fromCursor(c, InvalidObjectWithNotAccessibleConstructor.class);
   }
+
+  @Test(expected = AssertionError.class)
+  public void cannotHandleNonPublicNestedClasses() throws Exception {
+    Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
+
+    ObjectWithNestedNonPulicObject.test(testSubject, c);
+  }
 }
