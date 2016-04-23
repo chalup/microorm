@@ -11,11 +11,16 @@ android {
   }
 
   defaultConfig {
-    minSdkVersion 10
+    minSdkVersion 15
     targetSdkVersion 22
     versionName project.VERSION_NAME
     versionCode Integer.parseInt(project.VERSION_CODE)
     consumerProguardFiles 'consumer-proguard-rules.pro'
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  packagingOptions {
+    exclude 'META-INF/LICENSE.txt'
   }
 }
 
@@ -35,12 +40,17 @@ dependencies {
   testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
   compile 'com.android.support:support-annotations:22.2.1'
+
+  androidTestCompile 'com.android.support:support-annotations:23.0.1'
+  androidTestCompile 'com.android.support.test:runner:0.4.1'
+  androidTestCompile 'com.android.support.test:rules:0.4.1'
+  androidTestCompile 'junit:junit:4.12'
+  androidTestCompile 'dk.ilios:spanner:0.6.0'
 }
 
 apply from: './gradle-mvn-push.gradle'
 
 project.afterEvaluate {
-  project.tasks.findByName("test").getTaskDependencies().getDependencies().each { task ->
-    task.jvmArgs('-noverify')
+  project.tasks.findByName("test").getTaskDependencies().getDependencies().each { task -> task.jvmArgs('-noverify')
   }
 }
