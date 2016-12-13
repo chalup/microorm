@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion 22
@@ -29,6 +30,9 @@ dependencies {
   testCompile 'com.squareup:fest-android:1.0.7'
   testCompile 'com.android.support:support-v4:22.2.1'
   testCompile 'org.mockito:mockito-all:1.9.5'
+
+  testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
   compile 'com.android.support:support-annotations:22.2.1'
 }

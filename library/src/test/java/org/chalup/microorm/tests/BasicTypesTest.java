@@ -483,4 +483,12 @@ public class BasicTypesTest {
     NonPublicNestedObject o = ObjectWithNestedNonPublicObject.test(testSubject, c);
     assertThat(o.id).isEqualTo(1500);
   }
+
+  @Test
+  public void shouldHandleKotlinDataClass() throws Exception {
+    Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
+
+    KotlinDataClass o = testSubject.fromCursor(c, KotlinDataClass.class);
+    assertThat(o.getId()).isEqualTo(1500);
+  }
 }
