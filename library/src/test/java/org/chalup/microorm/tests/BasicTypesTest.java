@@ -477,6 +477,6 @@ public class BasicTypesTest {
   public void cannotHandleNonPublicNestedClasses() throws Exception {
     Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
 
-    ObjectWithNestedNonPulicObject.test(testSubject, c);
+    ObjectWithNestedNonPublicObject.test(testSubject, c);
   }
 }
