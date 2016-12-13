@@ -13,6 +13,6 @@ public class ObjectWithNestedNonPublicObject {
   }
 
   public static NonPublicNestedObject test(MicroOrm microOrm, Cursor cursor) {
-    microOrm.fromCursor(cursor, NonPublicNestedObject.class);
+    return microOrm.fromCursor(cursor, NonPublicNestedObject.class);
   }
 }

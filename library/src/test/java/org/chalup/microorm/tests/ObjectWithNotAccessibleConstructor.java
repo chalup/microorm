@@ -4,8 +4,8 @@ import org.chalup.microorm.annotations.Column;
 
 import android.provider.BaseColumns;
 
-public class InvalidObjectWithNotAccessibleConstructor {
-  private InvalidObjectWithNotAccessibleConstructor() {
+public class ObjectWithNotAccessibleConstructor {
+  private ObjectWithNotAccessibleConstructor() {
   }
 
   @Column(BaseColumns._ID)

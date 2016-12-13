@@ -25,12 +25,13 @@ import com.google.common.collect.Sets;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Set;
 
 class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
-  private final Class<T> mKlass;
+  private final ClassFactory<T> mClassFactory;
   private final ImmutableList<FieldAdapter> mFieldAdapters;
   private final ImmutableList<EmbeddedFieldInitializer> mFieldInitializers;
   private final String[] mProjection;
@@ -38,7 +39,7 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
   private final ImmutableSet<String> mWritableDuplicates;
 
   ReflectiveDaoAdapter(Class<T> klass, ImmutableList<FieldAdapter> fieldAdapters, ImmutableList<EmbeddedFieldInitializer> fieldInitializers) {
-    mKlass = klass;
+    mClassFactory = ClassFactory.get(klass);
     mFieldAdapters = fieldAdapters;
     mFieldInitializers = fieldInitializers;
 
@@ -73,19 +74,17 @@ class ReflectiveDaoAdapter<T> implements DaoAdapter<T> {
 
   @Override
   public T createInstance() {
-    return createInstance(mKlass);
-  }
-
-  private T createInstance(Class<T> klass) {
     try {
-      T instance = klass.newInstance();
+      T instance = mClassFactory.newInstance();
       for (EmbeddedFieldInitializer fieldInitializer : mFieldInitializers) {
         fieldInitializer.initEmbeddedField(instance);
       }
       return instance;
-    } catch (InstantiationException e) {
+    } catch (InvocationTargetException e) {
       throw new AssertionError(e);
     } catch (IllegalAccessException e) {
+      throw new AssertionError(e);
+    } catch (InstantiationException e) {
       throw new AssertionError(e);
     }
   }
