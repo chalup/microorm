@@ -22,6 +22,7 @@ import static org.fest.assertions.api.android.content.ContentValuesEntry.entry;
 
 import org.chalup.microorm.MicroOrm;
 import org.chalup.microorm.annotations.Column;
+import org.chalup.microorm.tests.ObjectWithNestedNonPublicObject.NonPublicNestedObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -450,8 +451,8 @@ public class BasicTypesTest {
     assertThat(values).contains(entry(StringDao.NULL_STRING_COLUMN, null));
   }
 
-  public static class InvalidObjectWithNonDefaultConstructor {
-    public InvalidObjectWithNonDefaultConstructor(long id) {
+  public static class ObjectWithNonDefaultConstructor {
+    public ObjectWithNonDefaultConstructor(long id) {
       this.id = id;
     }
 
@@ -459,24 +460,35 @@ public class BasicTypesTest {
     long id;
   }
 
-  @Test(expected = AssertionError.class)
-  public void cannotHandleObjectWithNonDefaultConstructorsOnly() throws Exception {
+  @Test
+  public void shouldHandleObjectWithNonDefaultConstructorsOnly() throws Exception {
     Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
 
-    testSubject.fromCursor(c, InvalidObjectWithNonDefaultConstructor.class);
+    ObjectWithNonDefaultConstructor o = testSubject.fromCursor(c, ObjectWithNonDefaultConstructor.class);
+    assertThat(o.id).isEqualTo(1500);
   }
 
-  @Test(expected = AssertionError.class)
-  public void cannotHandleObjectWithNonPublicDefaultConstructor() throws Exception {
+  @Test
+  public void shouldHandleObjectWithNonPublicDefaultConstructor() throws Exception {
     Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
 
-    testSubject.fromCursor(c, InvalidObjectWithNotAccessibleConstructor.class);
+    ObjectWithNotAccessibleConstructor o = testSubject.fromCursor(c, ObjectWithNotAccessibleConstructor.class);
+    assertThat(o.id).isEqualTo(1500);
   }
 
-  @Test(expected = AssertionError.class)
-  public void cannotHandleNonPublicNestedClasses() throws Exception {
+  @Test
+  public void shouldHandleNonPublicNestedClasses() throws Exception {
     Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
 
-    ObjectWithNestedNonPulicObject.test(testSubject, c);
+    NonPublicNestedObject o = ObjectWithNestedNonPublicObject.test(testSubject, c);
+    assertThat(o.id).isEqualTo(1500);
+  }
+
+  @Test
+  public void shouldHandleKotlinDataClass() throws Exception {
+    Cursor c = TestCursorBuilder.cursor(BaseColumns._ID).addRow(1500L);
+
+    KotlinDataClass o = testSubject.fromCursor(c, KotlinDataClass.class);
+    assertThat(o.getId()).isEqualTo(1500);
   }
 }
