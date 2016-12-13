@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 0.7.0 *(2016-12-13)*
+----------------------------
+
+ * Better handling of object creation. MicroOrm now can create instances of Kotlin data classes, classes without public constructor or classes without a default constructor.
+
 Version 0.6.2 *(2015-10-19)*
 ----------------------------
 
