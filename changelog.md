@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 0.8.0 *(2017-02-07)*
+----------------------------
+
+ * Add missing `@Target(FIELD)` to `@Embedded` annotation. This solves the issue with incorrect projection for Kotlin data classes with `@Embedded` fields.
+
 Version 0.7.0 *(2016-12-13)*
 ----------------------------
 
