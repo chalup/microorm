@@ -37,9 +37,9 @@ import android.database.Cursor;
 @Config(manifest = Config.NONE)
 public class EmbeddedTest {
 
-  private static final String FIRST_NAME_COLUMN = "first_name";
-  private static final String LAST_NAME_COLUMN = "last_name";
-  private static final String AGE_COLUMN = "age";
+  static final String FIRST_NAME_COLUMN = "first_name";
+  static final String LAST_NAME_COLUMN = "last_name";
+  static final String AGE_COLUMN = "age";
 
   private static final String TEST_FIRST_NAME = "Jan";
   private static final String TEST_LAST_NAME = "Kowalski";
@@ -116,6 +116,28 @@ public class EmbeddedTest {
     final Parent parent = new Parent();
     final ContentValues contentValues = testSubject.toContentValues(parent);
     assertValuesAreNull(contentValues, FIRST_NAME_COLUMN, LAST_NAME_COLUMN, AGE_COLUMN);
+  }
+
+  @Test
+  public void shouldReturnCorrectProjectionForJavaClassWithEmbeddedFields() throws Exception {
+    assertThat(testSubject.getProjection(Parent.class))
+        .asList()
+        .containsExactly(
+            AGE_COLUMN,
+            FIRST_NAME_COLUMN,
+            LAST_NAME_COLUMN
+        );
+  }
+
+  @Test
+  public void shouldReturnCorrectProjectionForKotlinDataClassWithEmbeddedFields() throws Exception {
+    assertThat(testSubject.getProjection(KotlinParentDataClass.class))
+        .asList()
+        .containsExactly(
+            AGE_COLUMN,
+            FIRST_NAME_COLUMN,
+            LAST_NAME_COLUMN
+        );
   }
 
   private void assertValuesAreNull(ContentValues values, String... columnNames) {
